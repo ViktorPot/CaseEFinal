@@ -58,14 +58,13 @@ public class Heuristic {
         
         // SET NURSE REQ per SHIFT
         // ALLE WAARDEN TOEKENNEN
-
-        System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
+roster1= generateRosterOneShiftPerDay20Shifts();
+        System.out.println("CYCLICAL FITNESS: " + getFitness(roster1));
         //System.out.println(getFitness(roster1));
       //  int[][] rosterTest = (MPS(assignmentPMS()));
- 
-        System.out.println("best roster " + getFitness(roster2));
-        //  Solution sol = new Solution(r, nrNurses, dep);
-        GA.execute(population);
+//        System.out.println("best roster " + getFitness(roster2));
+        //Solution sol = new Solution(r, nrNurses, dep);
+        //GA.execute(population);
         return roster2;
     }
 
@@ -133,7 +132,7 @@ public class Heuristic {
                 }
             }
             
-            System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));  
+            //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));  
         }
            return newRoster;
     }
@@ -222,11 +221,12 @@ public class Heuristic {
             for (int n = 0; n < totalShifts; n++) {
                 if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
                     newRoster[m][n]=1;
-                }}
+                }}}
                    
-                     System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
+                     //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
         return newRoster;
-    }// genereert Roster met 28 dagen een shift
+    }
+// genereert Roster met 28 dagen een shift
     public static int[][] generateRosterOneShiftPerDay20Shifts(){
          int[][] newRoster = generateRosterOneShiftPerDay();
             for ( int i = 0; i < nrNurses; i++) { 
@@ -247,13 +247,13 @@ public class Heuristic {
                     newRoster[m][n]=1;
                 }}
                    
-                     System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
-            
-            return newRoster;
-            
+                     //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
             }
+            return newRoster;
+    }
 
 
+    
     public static int[][] MPS(int[][] currentRoster) {
         int[][] r1 = new int[nrNurses][totalShifts];
         int[][] bestRoster = currentRoster;
@@ -360,13 +360,13 @@ public class Heuristic {
     public static double getFitness(int[][] roster) {
         double fitness = 0;
         fitness += pen_PrefAll(roster);
-
         fitness += pen_MinCov(roster); // is per type berekend
         fitness += pen_Surplus(roster, depUsed); // is per type berekend
-
         fitness += pen_Fairness(roster, depUsed);
         fitness += pen_consecShifts(roster, depUsed);
+        fitness += pen_succesionShifts(roster, depUsed);
         fitness += pen_maxShifts(roster, depUsed);
+        
         return fitness;
 
     }
@@ -381,11 +381,11 @@ public class Heuristic {
             }
 
         }
-        //  System.out.println("Pref :" + pen);
-        return pen * 2;
+        System.out.println("Pref :" + pen);
+        return pen;
     }
 
-       private static double pen_Surplus(int[][] roster, Department dep) { // GEEFT NIET DE JUISTE WEER
+    private static double pen_Surplus(int[][] roster, Department dep) { // GEEFT NIET DE JUISTE WEER
         double pen1 = 0; // NIGHT , (i+3) % 5 LATE, (i+4) % 5 DAY , (i) % 5 EARLY, (i+1)% FREE
         double penTotal = 0;
 
@@ -523,7 +523,7 @@ public class Heuristic {
                     //System.out.println(countConsecNurse);
                     if (countConsecNurse > 5) {
                         nrOfTooMuchConsec++;
-                         System.out.println("location : shift" + i + "nurse"  + j); 
+                         //System.out.println("location : shift" + i + "nurse"  + j); 
                     }}
                     if (k == 0 && roster[j][i] == 1){
                         countConsecNurse=0;
