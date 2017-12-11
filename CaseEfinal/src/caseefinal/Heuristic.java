@@ -221,78 +221,47 @@ public class Heuristic {
             System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));  
         }
         return newRoster;
-    } // Geen 5x on na elkaar
+    } // Geen 5x on na elkaa
     public static int[][] generateRosterOneShiftPerDay(){
-        int[][] newRoster = generateRoster();
+        int[][] newRoster = new int[nrNurses][totalShifts];
         for ( int i = 0; i < nrNurses; i++) { 
-            int countShiftDay=0;
-            for(int d =0;d<nrDays;d+=5){
-            for (int j = d; j < d+5; d++) {
+            for(int d =0;d<totalShifts;d+=5){
+                int nrOfShifts=0;
+            while (nrOfShifts<1) {
                  Random rando= new Random();
+               int shift= rando.nextInt(5);
+               if(shift%5 ==0  || (shift+3)%5 ==0 || (shift+2)%5 ==0){
+               newRoster[i][d+shift]=1;
+               nrOfShifts++;
+               }
+                }}
+             //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));  
+        
+    }
+        for ( int m = 0; m < nrNurses; m++) {
+            for (int n = 0; n < totalShifts; n++) {
+                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
+                    newRoster[m][n]=1;
+                }}
+                   
+                     System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
+        return newRoster;
+    }// genereert Roster met 28 dagen een shift
+    public static int[][] generateRosterOneShiftPerDay20Shifts(){
+         int[][] newRoster = generateRosterOneShiftPerDay();
+            for ( int i = 0; i < nrNurses; i++) { 
+           int countShiftsNurse=0;
+           while(countShiftsNurse>20){
+               Random rando= new Random();
                int shift= rando.nextInt(139);
                if(shift%5 ==0  || (shift+3)%5 ==0 || (shift+2)%5 ==0){
-               newRoster[i][shift]=1;
-             
+               newRoster[i][shift]=0;
+               countShiftsNurse--;}
+                   }
                }
-                if(j%5==0){
-                    countShiftDay=0;
-                     //System.out.println(countShiftDay); 
-                }
-                if(newRoster[i][j]>0 ){
-//                     System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));
-                    countShiftDay++;
-                    System.out.println("location : shift" + j + "nurse"  + i);
-                    System.out.println(countShiftDay);
-                    if(countShiftDay==2){
-                        newRoster[i][j]=0;
-                          //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));
-                    }
-                }
-            } System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));  
-        }
-        
-    }
-        return newRoster;
-    }
-    
-    
-//    public static int[][] generateRosterMinCov(){
-//        double pen1 = 0;
-//        double penTotal = 0;
-//
-//        int sum1[] = new int[totalShifts];
-//        int sumTotal[] = new int[totalShifts];
-//        int diff1[] = new int[totalShifts];
-//        int diffTotal[] = new int[totalShifts];
-//
-//        for (int j = 0; j < totalShifts; j++) {
-//            for (int i = 0; i < nrNurses; i++) {
-//                if (i < 6 && roster[i][j] == 1) {
-//                    sum1[j] += 1;
-//                    sumTotal[j] += 1;
-//                } else if (roster[i][j] == 1) {
-//                    sumTotal[j] += 1;
-//                }
-//            }
-//            diff1[j] = Math.max(0, type1Req[j] - sum1[j]);
-//            diffTotal[j] = Math.max(0, totalReq[j] - sumTotal[j]);
-//            pen1 += diff1[j];
-//            penTotal += diffTotal[j];
-//        }
-//        double pen = (pen1 * PEN_MINCOV_TYPE_1 + penTotal * PEN_MINCOV);
-//
-//        System.out.println("MINCOV : " + pen);
-//
-//        return pen;
-//    }
-    
-            
-       
+            return newRoster;
+            }
 
-   
-        
-    
-    
 
     public static int[][] MPS(int[][] currentRoster) {
         int[][] r1 = new int[nrNurses][totalShifts];
