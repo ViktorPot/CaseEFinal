@@ -23,9 +23,10 @@ public class Algo {
     // SELECTION, MUTATION
 // IN FORMAT OF BASIC CYCLICAL ROSTER
             /* GA parameters */
-    private static final double uniformRate = 0.5;
-    private static final double mutationRate = 0.015;
-    private static final int tournamentSize = 4;
+    private static final double uniformRate = 0.01;
+    private static final double mutationRate = 0.02;
+    private static final double shiftRowRate = 0.10;
+    private static final int tournamentSize = 5;
     private static final boolean elitism = true;
 
     /* Public methods */
@@ -54,11 +55,14 @@ public class Algo {
             evolvePopulation.add(newIndiv);
         }
 
+        for (int i = elitismOffset; i < pop.size(); i++) {
+            shiftRow(evolvePopulation.get(i));
+        }
         // Mutate population
-        for (int i = elitismOffset; i < evolvePopulation.size(); i++) {
+        for (int i = elitismOffset; i < pop.size(); i++) {
             mutate(evolvePopulation.get(i));
         }
-    
+
         return evolvePopulation;
     }
 
@@ -67,30 +71,40 @@ public class Algo {
         Individual newSol = new Individual(indiv1.getRoster().length, indiv1.getRoster()[0].length);
         // Loop through genes
         for (int i = 0; i < indiv1.getRoster().length; i++) {
-            for (int j = 0; j < indiv1.getRoster()[0].length; j++) {
-                // Crossover
-                if (Math.random() <= uniformRate) {
-                    newSol.getRoster()[i][j] = indiv1.getRoster()[i][j];
-                } else {
-                    newSol.getRoster()[i][j] = indiv2.getRoster()[i][j];
-                }
+
+            // Crossover
+            if (Math.random() <= uniformRate) {
+                newSol.getRoster()[i] = indiv1.getRoster()[i];
+            } else {
+                newSol.getRoster()[i] = indiv2.getRoster()[i];
             }
+
         }
         return newSol;
     }
 
+    private static void shiftRow(Individual indiv) {
+        for (int i = 0; i < indiv.getRoster().length; i++) {
+            if (Math.random() <= shiftRowRate) {
+
+                indiv.getRoster()[i] = indiv.getRoster()[(int) (Math.random()) * indiv.getRoster().length];
+
+            }
+        }
+    }
     // Mutate an individual
-    private static Individual mutate(Individual indiv) {
+
+    private static void mutate(Individual indiv) {
         // Loop through genes
         for (int i = 0; i < indiv.getRoster().length; i++) {
             for (int j = 0; j < indiv.getRoster()[0].length; j++) {
                 if (Math.random() <= mutationRate) {
                     // Create random gene
-                  indiv.getRoster()[i][j] = (int) (Math.random() *2);
+                    indiv.getRoster()[i][j] = (int) (Math.random() * 2);
                 }
             }
         }
-        return indiv;
+
     }
 
     // Select individuals for crossover
