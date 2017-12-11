@@ -43,12 +43,7 @@ public class Individual {
             //Genation methode
     }
 
-    public double getFitness() {
-        if (fitness == 0) {
-            fitness = Heuristic.getFitness(roster);
-        }
-        return fitness;
-    }
+   
     public int size() {
     return this.roster.length;
     }
@@ -64,9 +59,7 @@ public class Individual {
         return OrigFitness;
     }
 
-    public int size() {
-        return this.roster.length;
-    }
+  
 
     public void setRoster(int[][] roster) {
         this.roster = roster;
