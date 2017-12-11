@@ -27,7 +27,7 @@ public class Heuristic {
     public static int[] totalReq, type1Req;
     public static int[][] cyclicalRoster, cyclicalRosterEncoded; //Roster in format as cyclicalRoster 
     public static int maxWorkingDays = 20;
-    public static int PEN_MINCOV = 200, PEN_MINCOV_TYPE_1 = 200,
+    public static int PEN_MINCOV = 300, PEN_MINCOV_TYPE_1 = 300,
             // PEN_NURSEDESIRED = 1, PEN_NURSEINDIFF = 5, PEN_NURSEAVERSION = 9,  in compliance with file
             // PEN_LEAVEDAY = 100, in compliance
             PEN_SURPLUS = 50, // 5 per dag genomen
