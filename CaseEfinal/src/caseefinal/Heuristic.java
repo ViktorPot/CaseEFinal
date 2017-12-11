@@ -19,7 +19,7 @@ import java.util.Random;
 public class Heuristic {
 
     public static Department depUsed;
-
+//Hallo!!
     public static int nrNurses = 32, nrDays = 28, nrShifts = 5, nrTypes = 2, totalShifts=140, nrNurseType1;
     public static ArrayList<Nurse> nurses;
     public static int[] cyclicalRosterTypes;   // IN // WEGDOEN
