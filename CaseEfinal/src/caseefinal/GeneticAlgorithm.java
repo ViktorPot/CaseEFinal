@@ -13,6 +13,8 @@ public class GeneticAlgorithm {
 
     public static int[][] roster;
     public static int[] rosterType, nurseType;
+    
+    p
  // SELECTION, MUTATION
 // IN FORMAT OF BASIC CYCLICAL ROSTER
             /* GA parameters */
