@@ -12,29 +12,27 @@ import java.util.HashMap;
  *
  * @author Viktor
  */
-public class Solution {
+public class Individual {
 
     public int[][] roster;
-    public double fitness;
-    public Department dep;
+    public double OrigFitness;
+  
 
-    public Solution(int[][] roster, double fitness, Department dep) {
+    public Individual(int[][] roster) {
         this.roster = roster;
-        this.fitness = fitness;
-        this.dep = dep;
+        this.OrigFitness = Heuristic.getFitness(roster);
+   
     }
 
     public int[][] getRoster() {
         return roster;
     }
 
-    public double getFitness() {
-        return fitness;
+    public double getOrigFitness() {
+        return OrigFitness;
     }
 
-    public Department getDep() {
-        return dep;
-    }
+   
 
 
 }

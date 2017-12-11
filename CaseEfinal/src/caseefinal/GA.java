@@ -13,12 +13,29 @@ import java.util.ArrayList;
  */
 public class GA {
 
-    private static ArrayList<Solution> population;
-    
+    private static ArrayList<Individual> population; // roster
+
     private static final double uniformRate = 0.5;
     private static final double mutationRate = 0.015;
     private static final int tournamentSize = 5;
     private static final boolean elitism = true;
+
+    //INITIALIZATION
+    //
+    public static void execute(ArrayList<Individual> pop) {
+        population = pop;
+        evaluation();
+        selection();
+    }
+
+    public static void evaluation() {
+        //GETFITNESS
+        
+    }
+
+    public static void selection() {
+        
+    }
 
     private static int[][] shifting(int[][] currentRoster, int iterations) {
         int[][] r1 = new int[currentRoster.length][currentRoster[0].length];
@@ -80,4 +97,5 @@ public class GA {
             return r2;
         }
     }
+
 }

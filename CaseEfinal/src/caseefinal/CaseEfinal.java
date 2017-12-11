@@ -34,12 +34,12 @@ public class CaseEfinal {
         System.out.println("ENTER DEP LETTER (A,B,C,D)");
         Department d = Read.readAll("files/depA.xlsx", "A");
 //Heuristic.generateRoster();
-//Heuristic.generateRoster20Shifts();
-        //Heuristic.generateRosterOneShiftPerDay20Shifts();
+    Heuristic.generateRoster20Shifts();
         //roster = Heuristic.heuristic(d);
 roster=Heuristic.generateRosterOneShiftPerDay20Shifts();
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
+       // Print.printRoster(roster, "files/FormatDepA.xlsx");
     }
 
 }
