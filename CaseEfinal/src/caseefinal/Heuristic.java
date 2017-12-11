@@ -59,15 +59,16 @@ public class Heuristic {
 
         // SET NURSE REQ per SHIFT
         // ALLE WAARDEN TOEKENNEN
-        System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
+        //System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
         //System.out.println(getFitness(roster1));
         //  int[][] rosterTest = (MPS(assignmentPMS()));
 
         System.out.println("best roster " + getFitness(roster2));
         //  Solution sol = new Solution(r, nrNurses, dep);
-        GA.execute(population);
+        //GA.execute(population);
         return roster2;
     }
+
 
    
     public static int countNrOfShiftsAssingedNurse(int[][] currentRoster, int nurse){// telt voor een bepaalde nurse met een bepaald roster het aantal assingde shifts
@@ -79,7 +80,31 @@ public class Heuristic {
             return nrOfShifts;
         }
     
-    public static int[][] generateRoster(){
+
+    /**
+     *
+     * @param dep
+     * @return
+     */
+    
+public static int[][] fixRoster(int[][] roster) {
+        int[][] result = new int[nrNurses][totalShifts];
+
+        for (int i = 0; i < nrNurses; i++) {
+            for (int j = 0; j < totalShifts; j++) {
+                result[i][j] = roster[i][j];
+                if ((j + 4) % 5 == 0) {
+                    result[i][j] = 0;
+                }
+                // ALS 1 bij E,L,N => Free = 0 EN OMGEKEERD
+
+            }
+        }
+        return result;
+    }
+
+    public static int[][] generateRoster() {
+
 
         System.err.println(nrNurses);
         // assign to the cyclical roster
@@ -278,18 +303,21 @@ public class Heuristic {
                    }
                }}
             for ( int m = 0; m < nrNurses; m++) {
+
             for (int n = 0; n < totalShifts; n++) {
+
                 if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
                     newRoster[m][n]=1;
-                }}
                    
                      //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
-            }
+
+            
+                }
+
+            }}
             return newRoster;
-    }
+    }// genereert Roster met 20 dagen 1 shift
 
-
-    
     public static int[][] MPS(int[][] currentRoster) {
         int[][] r1 = new int[nrNurses][totalShifts];
         int[][] bestRoster = currentRoster;
@@ -559,13 +587,19 @@ public class Heuristic {
                     //System.out.println(countConsecNurse);
                     if (countConsecNurse > 5) {
                         nrOfTooMuchConsec++;
+
                          //System.out.println("location : shift" + i + "nurse"  + j); 
                     }}
                     if (k == 0 && roster[j][i] == 1){
                         countConsecNurse=0;
+
+                        System.out.println("location : shift" + i + "nurse" + j);
+
                     }
+                if (k == 0 && roster[j][i] == 1) {
+                    countConsecNurse = 0;
                 }
-                
+
 //                     if (k == 0 && roster[j][i] == 0 && i== totalShifts-1){// Als op laatste dag monthly roster gewerkt wordt=> Kijken naar eerste dag vd maand.
 //                         i=4;
 //                         while(roster[j][i]==0){
@@ -580,7 +614,8 @@ public class Heuristic {
 //                }
 //            }}
             }
-        
+        }
+
         pen = nrOfTooMuchConsec * PEN_CONSEC;
         System.out.println("CONSECUTIVE SHIFTS " + pen);
         return pen;
