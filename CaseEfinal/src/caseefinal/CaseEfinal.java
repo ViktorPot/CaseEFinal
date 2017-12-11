@@ -35,10 +35,11 @@ public class CaseEfinal {
         Department d = Read.readAll("files/depA.xlsx", "A");
 //Heuristic.generateRoster();
 //Heuristic.generateRoster20Shifts();
-        Heuristic.generateRosterOneShiftPerDay20Shifts();
+        //Heuristic.generateRosterOneShiftPerDay20Shifts();
         //roster = Heuristic.heuristic(d);
+roster=Heuristic.generateRosterOneShiftPerDay20Shifts();
+        //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
-        Print.printRoster(roster, "files/FormatDepA.xlsx");
     }
 
 }

@@ -66,14 +66,16 @@ public class Heuristic {
         return roster2;
     }
 
-    /**
-     *
-     * @param dep
-     * @return
-     */
-    public static int[][] countNrOfShifts(int[][] currentRoster){
-        
-    }
+   
+    public static int countNrOfShiftsAssingedNurse(int[][] currentRoster, int nurse){// telt voor een bepaalde nurse met een bepaald roster het aantal assingde shifts
+        int nrOfShifts=0;
+        for(int i=0; i<totalShifts;i++){
+        if(currentRoster[nurse][i]==1){
+            nrOfShifts++;
+        }}
+            return nrOfShifts;
+        }
+    
     public static int[][] generateRoster(){
 
         System.err.println(nrNurses);
@@ -133,30 +135,6 @@ public class Heuristic {
            return newRoster;
     }
     
-    public static int[][] generateRosterOneShiftPerDay2(){
-        int[][] newRoster = new int[nrNurses][totalShifts];
-        for ( int i = 0; i < nrNurses; i++) { 
-            int countShiftDay=0;      
-            for (int j = 0; j < totalShifts; j++) {
-                
-                     //System.out.println(countShiftDay); 
-                if(newRoster[i][j]>0 ){
-//                     System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));
-                    countShiftDay++;
-                    System.out.println("location : shift" + j + "nurse"  + i);
-                    System.out.println(countShiftDay);
-                    if(countShiftDay==2){
-                        newRoster[i][j]=0;
-                          //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));
-                        
-                        
-                    }
-                }
-            } System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));  
-        }
-        return newRoster;
-    }
-     // Zorg ervoor dat SOM E,L,N <1 error: early soms nog gevolgd door night...
     public static int[][] generateRosterSuccessionRule(){
         int[][] newRoster = generateRoster();
         for (int j = 0; j < nrNurses; j++) {
@@ -249,12 +227,13 @@ public class Heuristic {
     public static int[][] generateRosterOneShiftPerDay20Shifts(){
          int[][] newRoster = generateRosterOneShiftPerDay();
             for ( int i = 0; i < nrNurses; i++) { 
-           int countShiftsNurse=0;
+               int countShiftsNurse=0;
+               countShiftsNurse+=countNrOfShiftsAssingedNurse(newRoster, i);
            while(countShiftsNurse>20){
                Random rando= new Random();
                int shift= rando.nextInt(139);
                if(shift%5 ==0  || (shift+3)%5 ==0 || (shift+2)%5 ==0){
-               if(roster[i][shift]==1){
+               if(newRoster[i][shift]==1){
                newRoster[i][shift]=0;
                countShiftsNurse--;}
                    }
@@ -266,6 +245,7 @@ public class Heuristic {
                 }}
                    
                      System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
+            
             return newRoster;
             
             }
