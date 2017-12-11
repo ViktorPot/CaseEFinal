@@ -44,11 +44,14 @@ public class CaseEfinal {
         // Print.printRoster(roster, "files/FormatDepA.xlsx");
         ArrayList<Individual> myPop = Heuristic.heuristicPop(d);
         int generationCount = 0;
-        for (int i = 0; i < 20; i++) { // cyclical roster pref
+        for (int i = 0; i < 5; i++) { // cyclical roster pref
 
             generationCount++;
             System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
             myPop = Algo.evolvePopulation(myPop);
+            for (Individual j : myPop) {
+                System.out.println(j);
+            }
         }
         System.out.println("done");
         roster = Algo.getFittest(myPop).getRoster();

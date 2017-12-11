@@ -24,8 +24,8 @@ public class Algo {
 // IN FORMAT OF BASIC CYCLICAL ROSTER
             /* GA parameters */
     private static final double uniformRate = 0.5;
-    private static final double mutationRate = 0.5;
-    private static final int tournamentSize = 5;
+    private static final double mutationRate = 0.005;
+    private static final int tournamentSize = 4;
     private static final boolean elitism = true;
 
     /* Public methods */
@@ -58,7 +58,7 @@ public class Algo {
         for (int i = elitismOffset; i < evolvePopulation.size(); i++) {
             mutate(evolvePopulation.get(i));
         }
-        System.out.println(pop.get(5));
+    
         return evolvePopulation;
     }
 
@@ -86,14 +86,17 @@ public class Algo {
             for (int j = 0; j < indiv.getRoster()[0].length; j++) {
                 if (Math.random() <= mutationRate) {
                     // Create random gene
-                    indiv.getRoster()[i][j] = (int) (2 * Math.random());
+                    if (indiv.getRoster()[i][j] == 1) {
+                        indiv.getRoster()[i][j] = 0;
+                    }
+                    if (indiv.getRoster()[i][j] == 0) {
+                        indiv.getRoster()[i][j] = 1;
+                    }
                 }
             }
         }
         return indiv;
     }
-
-    
 
     // Select individuals for crossover
     private static Individual tournamentSelection(ArrayList<Individual> pop) {

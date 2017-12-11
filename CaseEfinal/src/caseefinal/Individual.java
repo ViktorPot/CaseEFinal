@@ -49,7 +49,7 @@ public class Individual {
 
     @Override
     public String toString() {
-        return "Individual{" + "OrigFitness=" + OrigFitness + ", Roster=" + Arrays.toString(roster[0]) + '}';
+        return "Individual{" + "OrigFitness=" + this.getOrigFitness() + ", Roster=" + Arrays.toString(roster[0]) + '}';
     }
 
     public double getOrigFitness() {
