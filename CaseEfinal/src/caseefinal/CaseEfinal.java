@@ -44,15 +44,15 @@ public class CaseEfinal {
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
         // Print.printRoster(roster, "files/FormatDepA.xlsx");
-        ArrayList<Individual> myPop = Heuristic.populatePopulation(50);
-        int generationCount = 0;
-        while (Algo.getFittest(myPop).getOrigFitness() < benchmark) { // cyclical roster pref
-            generationCount++;
-            System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
-            myPop = Algo.evolvePopulation(myPop);
-        }
-        roster = Algo.getFittest(myPop).getRoster();
-        Print.printRoster(roster, "files/FormatDepA.xlsx");
+//        ArrayList<Individual> myPop = Heuristic.populatePopulation(50);
+//        int generationCount = 0;
+//        while (Algo.getFittest(myPop).getOrigFitness() < benchmark) { // cyclical roster pref
+//            generationCount++;
+//            System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
+//            myPop = Algo.evolvePopulation(myPop);
+//        }
+//        roster = Algo.getFittest(myPop).getRoster();
+//        Print.printRoster(roster, "files/FormatDepA.xlsx");
     }
 
 }

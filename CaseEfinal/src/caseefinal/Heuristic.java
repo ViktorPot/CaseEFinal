@@ -59,7 +59,9 @@ public class Heuristic {
 
         // SET NURSE REQ per SHIFT
         // ALLE WAARDEN TOEKENNEN
-        System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
+        //System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
+        populatePopulation(nrShifts);
+//        getFitness(newRoster);
         //System.out.println(getFitness(roster1));
         //  int[][] rosterTest = (MPS(assignmentPMS()));
           //populatePopulation(20);
@@ -68,7 +70,7 @@ public class Heuristic {
         //GA.execute(population);
         return roster;
     }
-     public static ArrayList<Individual>heuristicPop(Department dep) {
+    public static ArrayList<Individual>heuristicPop(Department dep) {
         depUsed = dep;
         cyclicalRosterEncoded = dep.getCrEncoded(); // int (type) [nrNurses][Shifts]
         cyclicalRoster = dep.getCyclicalRoster();
@@ -115,12 +117,27 @@ public class Heuristic {
 
     public static ArrayList<Individual>populatePopulation(int Iterations){
         ArrayList<Individual> population = new ArrayList<Individual>();
-        for(int i=0; i<Iterations; i++){
-            int[][] newRoster = new int[nrNurses][totalShifts];
-            newRoster=generateRosterOneShiftPerDay20Shifts();
-            Individual ind= new Individual(newRoster);
+        for(int r=0;r<4;r++)
+        {
+          
+            int[][] newRoster1 = new int[nrNurses][totalShifts]; //ADD CYCLICAL
+            newRoster1=cyclicalRosterEncoded;
+            Individual ind= new Individual(newRoster1);
             population.add(ind);
-            System.out.println("Value: )"+ ind.toString());
+        System.out.println("Value: )"+ ind.toString());}
+        for(int i=0; i<50; i++){//ADD PREFERENCES 50
+            int[][] newRoster2 = new int[nrNurses][totalShifts];
+            newRoster2=generateRosterBasedOnPreference(depUsed);
+            Individual ind2 = new Individual(newRoster2);
+            population.add(ind2);
+        System.out.println("Value: )"+ ind2.toString());}
+        for(int k=0; k<40;k++){// ADD ONE/DAY 20
+            int[][] newRoster3 = new int[nrNurses][totalShifts];
+            newRoster3=generateRosterOneShiftPerDay();
+            Individual ind3 = new Individual(newRoster3);
+            population.add(ind3);
+            
+            System.out.println("Value: )"+ ind3.toString());
         }
         return population;
     }
@@ -340,11 +357,11 @@ public class Heuristic {
             return newRoster;
     }// genereert Roster met 20 dagen 1 shift
     
-     public static int[][] generateRosterBasedOnPreference(Department d){
+    public static int[][] generateRosterBasedOnPreference(Department d){
         int[][] newRoster = new int[nrNurses][totalShifts];
          for ( int i = 0; i < nrNurses; i++) { 
               for(int j=0; j<totalShifts;j++){
-                  if(d.getNurses().get(i).getPrefGiven()[j]>10){
+                  if(d.getNurses().get(i).getPrefGiven()[j]>8){
                       newRoster[i][j]=1;}
                       else{
                               newRoster[i][j]=0;
@@ -360,46 +377,33 @@ public class Heuristic {
               }
          return newRoster;
      }
-
-    public static int[][] MPS(int[][] currentRoster) {
-        int[][] r1 = new int[nrNurses][totalShifts];
-        int[][] bestRoster = currentRoster;
-        int i1;
-        // minimum = Double.POSITIVE_INFINITY;
-        for (i1 = 0; i1 < 1000; i1++) {
-            r1 = bestRoster;
-
-            int[][] r2 = assignmentPMS();
-
-            bestRoster = compareRoster(r1, r2);
+    public static int[][] generateRosterOneShiftPerDayBasedOnPreference(Department d){
+       int[][] newRoster = new int[nrNurses][totalShifts];
+        for (int i = 0; i < nrNurses; i++) {
+            for (int j = 0; j < totalShifts; j += 5) {
+                    Random rando = new Random();
+                    int shift = rando.nextInt(5);
+                    if (shift % 5 == 0 || (shift + 3) % 5 == 0 || (shift + 2) % 5 == 0) {
+                         if(d.getNurses().get(i).getPrefGiven()[i]>10){
+                      newRoster[i][j]=1;}
+                      else{
+                              newRoster[i][j]=0;
+                              
+                    }
+                }
+            }
+            //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));  
         }
-        return bestRoster;
+        for (int m = 0; m < nrNurses; m++) {
+            for (int n = 0; n < totalShifts; n++) {
+                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
+                    newRoster[m][n]=1;
+                }}}
+                   
+                     //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
+        return newRoster;
     }
-
-    private static int[][] muteer(int[][] roster, int iterations) {
-        int[][] r1 = roster;
-        int[][] bestRoster = roster;
-        int i1;
-        // minimum = Double.POSITIVE_INFINITY;
-        for (i1 = 0; i1 < 50000; i1++) {
-            r1 = bestRoster;
-            int[][] r2 = randomMutatie(r1);
-
-            bestRoster = compareRoster(r1, r2);
-        }
-        return bestRoster;
-
-    }
-
-    private static int[][] randomMutatie(int[][] roster) {
-        for (int t = 0; t < 140; t++) {
-            int i = (int) Math.random() * nrNurses + 1;
-            int j = (int) Math.random() * totalShifts + 1;
-            roster[i][j] = (int) (2 * Math.random());
-        }
-        return roster;
-    }
-
+    
     private static int[][] shifting(int[][] currentRoster, int iterations) {
         int[][] r1 = new int[nrNurses][totalShifts];
         int[][] bestRoster = currentRoster;
