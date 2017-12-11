@@ -27,7 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class CaseEfinal {
 
     static int[][] roster;
-    public static int benchmark;
+    public static int benchmark = 80000;
 
     /**
      * @param args the command line arguments
@@ -43,11 +43,11 @@ public class CaseEfinal {
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
         // Print.printRoster(roster, "files/FormatDepA.xlsx");
-        ArrayList<Individual> myPop = new ArrayList<>();
+        ArrayList<Individual> myPop = Heuristic.populatePopulation(50);
         int generationCount = 0;
         while (Algo.getFittest(myPop).getOrigFitness() < benchmark) { // cyclical roster pref
             generationCount++;
-            System.out.println("Generation: " + generationCount + " Fittest: " + Algorithm.getFittest(pop));
+            System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
             myPop = Algo.evolvePopulation(myPop);
         }
         roster = Algo.getFittest(myPop).getRoster();
