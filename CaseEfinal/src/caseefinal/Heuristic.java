@@ -56,14 +56,11 @@ public class Heuristic {
         type1Req = dep.getType1Req();
         // SET NURSE REQ per SHIFT
         // ALLE WAARDEN TOEKENNEN
-//        System.out.println("Req: " + Arrays.toString(totalReq));
-//        System.out.println("ReqType1: " + Arrays.toString(type1Req));
 
-        //roster1 = assignCyclicalRoster(dep);
-        System.out.println("CYCLICAL FITNESS: " + getFitness(roster1));
+        System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
         //System.out.println(getFitness(roster1));
       //  int[][] rosterTest = (MPS(assignmentPMS()));
-        int[][] roster2 = muteer(cyclicalRosterEncoded, 5000);
+ 
         System.out.println("best roster " + getFitness(roster2));
         //  Solution sol = new Solution(r, nrNurses, dep);
         return roster2;
