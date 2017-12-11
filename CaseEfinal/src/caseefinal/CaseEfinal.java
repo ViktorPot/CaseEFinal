@@ -38,13 +38,13 @@ public class CaseEfinal {
         //Heuristic.generateRoster20Shifts();
         //roster = Heuristic.heuristic(d);
 //roster=Heuristic.generateRosterOneShiftPerDay20Shifts();
-        Heuristic.heuristic(d);
+      
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
         // Print.printRoster(roster, "files/FormatDepA.xlsx");
-        ArrayList<Individual> myPop = Heuristic.populatePopulation(50);
+        ArrayList<Individual> myPop = Heuristic.heuristic(d);
         int generationCount = 0;
-        while (Algo.getFittest(myPop).getOrigFitness() < benchmark) { // cyclical roster pref
+        while (Algo.getFittest(myPop).getOrigFitness() < 35000) { // cyclical roster pref
             generationCount++;
             System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
             myPop = Algo.evolvePopulation(myPop);
