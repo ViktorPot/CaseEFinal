@@ -28,7 +28,14 @@ public class Individual {
         this.OrigFitness = Heuristic.getFitness(roster);
     }
 
-   
+    public Individual(int imax, int jmax) {
+        for (int i = 0; i < imax; i++) {
+            for (int j = 0; j < jmax; j++) {
+                this.roster[i][j] = 0;
+
+            }
+        }
+    }
 
     // Create a random individual
     public void generateIndividual() {
@@ -52,5 +59,21 @@ public class Individual {
     }
     
     
+
+    public double getOrigFitness() {
+        return OrigFitness;
+    }
+
+    public int size() {
+        return this.roster.length;
+    }
+
+    public void setRoster(int[][] roster) {
+        this.roster = roster;
+    }
+
+    public int[][] getRoster() {
+        return roster;
+    }
 
 }

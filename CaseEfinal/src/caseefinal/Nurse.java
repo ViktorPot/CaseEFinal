@@ -17,7 +17,7 @@ public class Nurse {
     public String code;
     public int type; //(1,2)
 
-    public int[] prefAll;
+    public int[] prefAll; 
     public double emplRate;
     public int totalPref;
     // INLEZEN sheet 1
