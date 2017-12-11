@@ -27,10 +27,10 @@ public class Heuristic {
     public static int[] totalReq, type1Req;
     public static int[][] cyclicalRoster, cyclicalRosterEncoded; //Roster in format as cyclicalRoster 
     public static int maxWorkingDays = 20;
-    public static int PEN_MINCOV = 100, PEN_MINCOV_TYPE_1 = 100,
+    public static int PEN_MINCOV = 100, PEN_MINCOV_TYPE_1 = 300,
             // PEN_NURSEDESIRED = 1, PEN_NURSEINDIFF = 5, PEN_NURSEAVERSION = 9,  in compliance with file
             // PEN_LEAVEDAY = 100, in compliance
-            PEN_SURPLUS = 10, // 5 per dag genomen
+            PEN_SURPLUS = 0, // 5 per dag genomen
             PEN_CYCLICALROSTER = 10,
             PEN_FAIRNESS = 50,
             WORKDAYSALLOWED = 5, // 5 shifts system ^^
@@ -60,7 +60,9 @@ public class Heuristic {
         // SET NURSE REQ per SHIFT
         // ALLE WAARDEN TOEKENNEN
         //System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
-        populatePopulation(nrShifts);
+        //populatePopulation(nrShifts);
+        roster1= generateRosterBasedOnPreference(dep);
+        fixRoster(roster1);
 //        getFitness(newRoster);
         //System.out.println(getFitness(roster1));
         //  int[][] rosterTest = (MPS(assignmentPMS()));
@@ -103,16 +105,20 @@ public class Heuristic {
      */
     public static int[][] fixRoster(int[][] roster) {
         int[][] result = new int[nrNurses][totalShifts];
-
         for (int i = 0; i < nrNurses; i++) {
             for (int j = 0; j < totalShifts; j++) {
                 result[i][j] = roster[i][j];
                 if ((j + 4) % 5 == 0) {
                     result[i][j] = 0;
                 }
-                // ALS 1 bij E,L,N => Free = 0 EN OMGEKEERD
-
-            }
+                if((j+1)%5==0 && (roster[i][j - 1] == 1 || roster[i][j - 2] == 1 || roster[i][j - 4] == 1)){
+                    result[i][j]=0;
+                }
+                if ((j + 1) % 5 == 0 && roster[i][j - 1] == 0 && roster[i][j - 2] == 0 && roster[i][j - 4] == 0) {// ALS 1 bij E,L,N => Free = 0 EN OMGEKEERD
+                    result[i][j] = 1;
+                }
+                }
+           System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(result[i]));
         }
         return result;
     }
@@ -372,25 +378,22 @@ public class Heuristic {
 
          for ( int i = 0; i < nrNurses; i++) { 
               for(int j=0; j<totalShifts;j++){
-                  if(d.getNurses().get(i).getPrefGiven()[j]>8){
+                  if(d.getNurses().get(i).getPrefGiven()[j]<11){
                       newRoster[i][j]=1;}
                       else{
                               newRoster[i][j]=0;
                               }
                   } }
-              for (int m = 0; m < nrNurses; m++) {
-        for (int i = 0; i < nrNurses; i++) {
-            for (int j = 0; j < totalShifts; j++) {
-                if (d.getNurses().get(i).getPrefGiven()[j] > 10) {
-                    newRoster[i][j] = 1;
-                } else {
-                    newRoster[i][j] = 0;
-                }
-            }
-        }
-           
-                     //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
-              }
+              
+            for (int m = 0; m < nrNurses; m++) {
+
+            for (int n = 0; n < totalShifts; n++) {
+
+                if ((n + 1) % 5 == 0 && newRoster[m][n - 1] == 0 && newRoster[m][n - 2] == 0 && newRoster[m][n - 4] == 0) {
+                    newRoster[m][n] = 1;                  
+                }}
+           System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
+                     
          return newRoster;
      }
 //    public static int[][] generateRosterOneShiftPerDayBasedOnPreference(Department d){
@@ -515,7 +518,7 @@ public class Heuristic {
         fitness += pen_consecShifts(roster, depUsed);
         fitness += pen_succesionShifts(roster, depUsed);
         fitness += pen_maxShifts(roster, depUsed);
-
+        System.out.println("FITNESS: "+ fitness);
         return fitness;
 
     }
@@ -530,7 +533,7 @@ public class Heuristic {
             }
 
         }
-//        System.out.println("Pref :" + pen);
+        System.out.println("Pref :" + pen);
         return pen;
     }
 
@@ -610,7 +613,7 @@ public class Heuristic {
             empl[i] = sum[i] / maxWorkingDays;
             pen += Math.abs(empl[i] - n.get(i).getEmplRate());
         }
-//        System.out.println("PEN FAIRNESS : " + pen * PEN_FAIRNESS);
+      //System.out.println("PEN FAIRNESS : " + pen * PEN_FAIRNESS);
         return pen * PEN_FAIRNESS;
     }
 
