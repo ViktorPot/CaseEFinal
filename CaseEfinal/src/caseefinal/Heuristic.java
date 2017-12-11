@@ -126,27 +126,27 @@ public class Heuristic {
             newRoster1=cyclicalRosterEncoded;
             Individual ind= new Individual(newRoster1);
             population.add(ind);
-
-        System.out.println("Value: )"+ ind.toString());}
+        }
+        //System.out.println("Value: )"+ ind.toString());}
         for(int i=0; i<50; i++){//ADD PREFERENCES 50
             int[][] newRoster2 = new int[nrNurses][totalShifts];
             newRoster2=generateRosterBasedOnPreference(depUsed);
             Individual ind2 = new Individual(newRoster2);
-            population.add(ind2);
-        System.out.println("Value: )"+ ind2.toString());}
+            population.add(ind2);}
+        //System.out.println("Value: )"+ ind2.toString());}
         for(int k=0; k<40;k++){// ADD ONE/DAY 20
             int[][] newRoster3 = new int[nrNurses][totalShifts];
             newRoster3=generateRosterOneShiftPerDay();
             Individual ind3 = new Individual(newRoster3);
             population.add(ind3);
+        }
             
-            System.out.println("Value: )"+ ind3.toString());
+            //System.out.println("Value: )"+ ind3.toString());
 
             //  System.out.println("Value: )" + ind.toString());
 
-        }
         return population;
-    }
+        }
 
     public static int[][] generateRoster() {
 
@@ -389,7 +389,7 @@ public class Heuristic {
             }
         }
            
-                     System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
+                     //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
               }
          return newRoster;
      }
