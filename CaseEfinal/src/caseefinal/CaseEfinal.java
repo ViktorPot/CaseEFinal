@@ -5,8 +5,6 @@
  */
 package caseefinal;
 
-
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -40,19 +38,24 @@ public class CaseEfinal {
         //Heuristic.generateRoster20Shifts();
         //roster = Heuristic.heuristic(d);
 //roster=Heuristic.generateRosterOneShiftPerDay20Shifts();
-        Heuristic.heuristicArray(d);
+        //  Heuristic.heuristicArray(d);
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
         // Print.printRoster(roster, "files/FormatDepA.xlsx");
-//        ArrayList<Individual> myPop = Heuristic.populatePopulation(50);
-//        int generationCount = 0;
-//        while (Algo.getFittest(myPop).getOrigFitness() < benchmark) { // cyclical roster pref
-//            generationCount++;
-//            System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
-//            myPop = Algo.evolvePopulation(myPop);
-//        }
-//        roster = Algo.getFittest(myPop).getRoster();
-//        Print.printRoster(roster, "files/FormatDepA.xlsx");
+        ArrayList<Individual> myPop = Heuristic.heuristicPop(d);
+        int generationCount = 0;
+        for (int i = 0; i < 5; i++) { // cyclical roster pref
+
+            generationCount++;
+            System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
+            myPop = Algo.evolvePopulation(myPop);
+            for (Individual j : myPop) {
+                System.out.println(j);
+            }
+        }
+        System.out.println("done");
+        roster = Algo.getFittest(myPop).getRoster();
+        Print.printRoster(roster, "files/FormatDepA.xlsx");
     }
 
 }

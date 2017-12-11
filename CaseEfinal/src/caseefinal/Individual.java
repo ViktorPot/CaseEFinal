@@ -21,45 +21,43 @@ public class Individual {
     //static int defaultGeneLength = 64;
     //private byte[] genes = new byte[defaultGeneLength];
     // Cache
-
-
     public Individual(int[][] roster) {
         this.roster = roster;
         this.OrigFitness = Heuristic.getFitness(roster);
     }
 
     public Individual(int imax, int jmax) {
+        roster = new int[imax][jmax];
         for (int i = 0; i < imax; i++) {
             for (int j = 0; j < jmax; j++) {
-                this.roster[i][j] = 0;
+                roster[i][j] = 0;
 
             }
         }
+        this.OrigFitness = 0;
     }
 
     // Create a random individual
     public void generateIndividual() {
 
-            //Genation methode
+        //Genation methode
     }
 
-   
     public int size() {
-    return this.roster.length;
+        return this.roster.length;
     }
 
     @Override
     public String toString() {
-        return "Individual{" + "roster=" + Arrays.toString(roster[0]) + ", OrigFitness=" + OrigFitness + '}';
+        return "Individual{" + "OrigFitness=" + this.getOrigFitness() + ", Roster=" + Arrays.toString(roster[0]) + '}';
     }
-    
-    
 
     public double getOrigFitness() {
+        if (this.OrigFitness == 0) {
+            return Heuristic.getFitness(this.roster);
+        }
         return OrigFitness;
     }
-
-  
 
     public void setRoster(int[][] roster) {
         this.roster = roster;

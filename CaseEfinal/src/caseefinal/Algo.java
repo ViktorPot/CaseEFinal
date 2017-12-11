@@ -25,7 +25,7 @@ public class Algo {
             /* GA parameters */
     private static final double uniformRate = 0.5;
     private static final double mutationRate = 0.015;
-    private static final int tournamentSize = 5;
+    private static final int tournamentSize = 4;
     private static final boolean elitism = true;
 
     /* Public methods */
@@ -58,7 +58,7 @@ public class Algo {
         for (int i = elitismOffset; i < evolvePopulation.size(); i++) {
             mutate(evolvePopulation.get(i));
         }
-
+    
         return evolvePopulation;
     }
 
@@ -86,14 +86,12 @@ public class Algo {
             for (int j = 0; j < indiv.getRoster()[0].length; j++) {
                 if (Math.random() <= mutationRate) {
                     // Create random gene
-                    indiv.getRoster()[i][j] = (int) (2 * Math.random());
+                  indiv.getRoster()[i][j] = (int) (Math.random() *2);
                 }
             }
         }
         return indiv;
     }
-
-    
 
     // Select individuals for crossover
     private static Individual tournamentSelection(ArrayList<Individual> pop) {
