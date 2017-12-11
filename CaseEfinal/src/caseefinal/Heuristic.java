@@ -44,6 +44,7 @@ public class Heuristic {
 
     public static int[][] roster, rosterExtra; // ROSTER SOLUTION
 
+    public static ArrayList<Individual> population;
     // MINIMIZE FITNESS!!!
     public static int[][] heuristic(Department dep) {
         depUsed = dep;
@@ -54,6 +55,7 @@ public class Heuristic {
         nrNurseType1 = dep.getNrType1();
         nurses = dep.getNurses();
         type1Req = dep.getType1Req();
+        
         // SET NURSE REQ per SHIFT
         // ALLE WAARDEN TOEKENNEN
 
@@ -63,6 +65,7 @@ public class Heuristic {
  
         System.out.println("best roster " + getFitness(roster2));
         //  Solution sol = new Solution(r, nrNurses, dep);
+        GA.execute(population);
         return roster2;
     }
 

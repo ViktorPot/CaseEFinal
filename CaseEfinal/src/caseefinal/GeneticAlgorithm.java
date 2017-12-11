@@ -9,7 +9,6 @@ package caseefinal;
  *
  * @author Viktor
  */
-import GA.Population;
 import GA.Individual;
 import GA.FitnessCalc; // Or use my fitnessCAlc
 
