@@ -46,7 +46,7 @@ Heuristic.heuristic(d);
         while (myPop.getFittest().getFitness() < ) { // cyclical roster pref
             generationCount++;
             System.out.println("Generation: " + generationCount + " Fittest: " + myPop.getFittest().getFitness());
-            myPop = Algorithm.evolvePopulation(myPop);
+            myPop = Algortihm.evolvePopulation(myPop);
         }
     }
 
