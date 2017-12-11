@@ -5,7 +5,7 @@
  */
 package caseefinal;
 
-import com.sun.javafx.scene.traversal.Algorithm;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -47,7 +47,7 @@ public class CaseEfinal {
         int generationCount = 0;
         while (Algo.getFittest(myPop).getOrigFitness() < benchmark) { // cyclical roster pref
             generationCount++;
-            System.out.println("Generation: " + generationCount + " Fittest: " + Algorithm.getFittest(pop));
+            System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(mypop));
             myPop = Algo.evolvePopulation(myPop);
         }
         roster = Algo.getFittest(myPop).getRoster();
