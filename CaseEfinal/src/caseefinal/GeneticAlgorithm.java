@@ -5,6 +5,8 @@
  */
 package caseefinal;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Viktor
@@ -14,7 +16,8 @@ public class GeneticAlgorithm {
     public static int[][] roster;
     public static int[] rosterType, nurseType;
     
-    p
+    public static ArrayList<Individual> StartPopulation;
+    public static ArrayList<Individual>
  // SELECTION, MUTATION
 // IN FORMAT OF BASIC CYCLICAL ROSTER
             /* GA parameters */
@@ -102,4 +105,20 @@ public class GeneticAlgorithm {
     public static void Mutate(int nr) {
 
     }
+    
+   public Individual getIndividual(int index) {
+        return individuals[index];
+    }
+
+    public Individual getFittest() {
+        Individual fittest = individuals[0];
+        // Loop through individuals to find fittest
+        for (int i = 0; i < size(); i++) {
+            if (fittest.getFitness() > getIndividual(i).getFitness()) {
+                fittest = getIndividual(i);
+            }
+        }
+        return fittest;
+    }
+
 }
