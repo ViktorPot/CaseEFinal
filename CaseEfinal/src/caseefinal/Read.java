@@ -118,7 +118,7 @@ public class Read { // READS ALL VALUES WE CAN READ IN
     }
 
     public static int[] readNursePrefAll(String fileName, Iterator<Cell> cellIterator) {
-        int[] pref = new int[(nrDays * nrShifts)];
+        int[] pref = new int[140];
 
         while (cellIterator.hasNext()) {
             Cell currentCell = cellIterator.next();

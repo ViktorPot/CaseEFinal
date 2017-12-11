@@ -5,17 +5,11 @@
  */
 package caseefinal;
 
-import GA.Individual;
-
 /**
  *
- * @author degraeveha
+ * @author Viktor
  */
-
-
 public class Population {
-    
-
     Individual[] individuals;
 
     /*
@@ -63,3 +57,4 @@ public class Population {
     }
 }
 
+}
