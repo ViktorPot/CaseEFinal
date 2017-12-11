@@ -41,6 +41,13 @@ Heuristic.heuristic(d);
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
        // Print.printRoster(roster, "files/FormatDepA.xlsx");
+        Population = 
+        int generationCount = 0;
+        while (myPop.getFittest().getFitness() < ) { // cyclical roster pref
+            generationCount++;
+            System.out.println("Generation: " + generationCount + " Fittest: " + myPop.getFittest().getFitness());
+            myPop = Algorithm.evolvePopulation(myPop);
+        }
     }
 
 }
