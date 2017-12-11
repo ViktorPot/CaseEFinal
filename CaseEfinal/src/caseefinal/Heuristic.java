@@ -20,7 +20,7 @@ public class Heuristic {
 
     public static Department depUsed;
 //Hallo!!
-    public static int nrNurses = 32, nrDays = 28, nrShifts = 5, nrTypes = 2, totalShifts=140, nrNurseType1;
+    public static int nrNurses = 32, nrDays = 28, nrShifts = 5, nrTypes = 2, totalShifts = 140, nrNurseType1;
     public static ArrayList<Nurse> nurses;
     public static int[] cyclicalRosterTypes;   // IN // WEGDOEN
     public static int[] nurseTypes;            // CONFORM
@@ -45,6 +45,7 @@ public class Heuristic {
     public static int[][] roster, rosterExtra; // ROSTER SOLUTION
 
     public static ArrayList<Individual> population;
+
     // MINIMIZE FITNESS!!!
     public static int[][] heuristic(Department dep) {
         depUsed = dep;
@@ -55,16 +56,16 @@ public class Heuristic {
         nrNurseType1 = dep.getNrType1();
         nurses = dep.getNurses();
         type1Req = dep.getType1Req();
-        
+
         // SET NURSE REQ per SHIFT
         // ALLE WAARDEN TOEKENNEN
-roster1= generateRosterOneShiftPerDay20Shifts();
-        System.out.println("CYCLICAL FITNESS: " + getFitness(roster1));
+        System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
         //System.out.println(getFitness(roster1));
-      //  int[][] rosterTest = (MPS(assignmentPMS()));
-//        System.out.println("best roster " + getFitness(roster2));
-        //Solution sol = new Solution(r, nrNurses, dep);
-        //GA.execute(population);
+        //  int[][] rosterTest = (MPS(assignmentPMS()));
+
+        System.out.println("best roster " + getFitness(roster2));
+        //  Solution sol = new Solution(r, nrNurses, dep);
+        GA.execute(population);
         return roster2;
     }
 
@@ -83,61 +84,91 @@ roster1= generateRosterOneShiftPerDay20Shifts();
         System.err.println(nrNurses);
         // assign to the cyclical roster
         int[][] newRoster = new int[nrNurses][totalShifts];
-        for ( int i = 0; i < nrNurses; i++) {
-            
+        for (int i = 0; i < nrNurses; i++) {
+
             for (int j = 0; j < totalShifts; j++) {
-                if(j%5 ==0 || (j+3)%5 ==0 || (j+2)%5 ==0){
+                if (j % 5 == 0 || (j + 3) % 5 == 0 || (j + 2) % 5 == 0) {
                     Random randomno = new Random();
-                     newRoster[i][j] = randomno.nextInt(2);
-                     
-                }
-                else{newRoster[i][j]=0;     
-    }}}
-    for ( int m = 0; m < nrNurses; m++) {
-            
-            for (int n = 0; n < totalShifts; n++) {
-                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
-                    newRoster[m][n]=1;
-                }
-                   
-                     
-                }
-               //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
-   
-        //System.out.println("FITNESS:  "+ Heuristic.getFitness(newRoster));
-    }
-            return newRoster;}  //Geneereert Random roster door invullen 0/1 op plaatsen E/L/N --> Free wordt obhv genereert
-    public static int[][] generateRoster20Shifts(){
-        int[][] newRoster = new int[nrNurses][totalShifts];
-        for ( int i = 0; i < nrNurses; i++) {
-             int countShiftsNurse=0;
-           while(countShiftsNurse<20){
-               Random rando= new Random();
-               int shift= rando.nextInt(139);
-               if(shift%5 ==0  || (shift+3)%5 ==0 || (shift+2)%5 ==0){
-               newRoster[i][shift]=1;
-               countShiftsNurse++;}
-               for(int j=0;j<totalShifts;j++){
-                   if(newRoster[i][j]!=1){
-                       newRoster[i][j]=0;
-                   }
-               }
-           
-        }} 
-        for ( int m = 0; m < nrNurses; m++) {
-            
-            for (int n = 0; n < totalShifts; n++) {
-                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
-                    newRoster[m][n]=1;
+                    newRoster[i][j] = randomno.nextInt(2);
+
+                } else {
+                    newRoster[i][j] = 0;
                 }
             }
-            
-            //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));  
         }
-           return newRoster;
+        for (int m = 0; m < nrNurses; m++) {
+
+            for (int n = 0; n < totalShifts; n++) {
+                if ((n + 1) % 5 == 0 && newRoster[m][n - 1] == 0 && newRoster[m][n - 2] == 0 && newRoster[m][n - 4] == 0) {
+                    newRoster[m][n] = 1;
+                }
+
+            }
+               //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
+
+            //System.out.println("FITNESS:  "+ Heuristic.getFitness(newRoster));
+        }
+        return newRoster;
+    }  //Geneereert Random roster door invullen 0/1 op plaatsen E/L/N --> Free wordt obhv genereert
+
+    public static int[][] generateRoster20Shifts() {
+        int[][] newRoster = new int[nrNurses][totalShifts];
+        for (int i = 0; i < nrNurses; i++) {
+            int countShiftsNurse = 0;
+            while (countShiftsNurse < 20) {
+                Random rando = new Random();
+                int shift = rando.nextInt(139);
+                if (shift % 5 == 0 || (shift + 3) % 5 == 0 || (shift + 2) % 5 == 0) {
+                    newRoster[i][shift] = 1;
+                    countShiftsNurse++;
+                }
+                for (int j = 0; j < totalShifts; j++) {
+                    if (newRoster[i][j] != 1) {
+                        newRoster[i][j] = 0;
+                    }
+                }
+
+            }
+        }
+        for (int m = 0; m < nrNurses; m++) {
+
+            for (int n = 0; n < totalShifts; n++) {
+                if ((n + 1) % 5 == 0 && newRoster[m][n - 1] == 0 && newRoster[m][n - 2] == 0 && newRoster[m][n - 4] == 0) {
+                    newRoster[m][n] = 1;
+                }
+            }
+
+            System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
+        }
+        return newRoster;
     }
-    
-    public static int[][] generateRosterSuccessionRule(){
+
+    public static int[][] generateRosterOneShiftPerDay2() {
+        int[][] newRoster = new int[nrNurses][totalShifts];
+        for (int i = 0; i < nrNurses; i++) {
+            int countShiftDay = 0;
+            for (int j = 0; j < totalShifts; j++) {
+
+                //System.out.println(countShiftDay); 
+                if (newRoster[i][j] > 0) {
+//                     System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));
+                    countShiftDay++;
+                    System.out.println("location : shift" + j + "nurse" + i);
+                    System.out.println(countShiftDay);
+                    if (countShiftDay == 2) {
+                        newRoster[i][j] = 0;
+                        //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));
+
+                    }
+                }
+            }
+            System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));
+        }
+        return newRoster;
+    }
+
+    // Zorg ervoor dat SOM E,L,N <1 error: early soms nog gevolgd door night...
+    public static int[][] generateRosterSuccessionRule() {
         int[][] newRoster = generateRoster();
         for (int j = 0; j < nrNurses; j++) {
             for (int i = 0; i < totalShifts; i++) {
@@ -145,79 +176,84 @@ roster1= generateRosterOneShiftPerDay20Shifts();
                 if (k == 0 && newRoster[j][i] == 1) {//niet gevolgd door early
                     if ((i + 4) < totalShifts) {
                         newRoster[j][i + 2] = 0;
-                        newRoster[j][i + 4] = 0;} 
-
-                            
-                             //System.out.println("location : shift" + i + "nurse"  + j); 
-                        
-                    if (i + 4 >= totalShifts) {
-                         newRoster[j][0] = 0;
-                         newRoster[j][2] = 0;
-                    } 
-                         //System.out.println("location : shift" + i + "nurse"  + j); 
+                        newRoster[j][i + 4] = 0;
                     }
-                }}
-             for ( int m = 0; m < nrNurses; m++) {
-            
+
+                    //System.out.println("location : shift" + i + "nurse"  + j); 
+                    if (i + 4 >= totalShifts) {
+                        newRoster[j][0] = 0;
+                        newRoster[j][2] = 0;
+                    }
+                    //System.out.println("location : shift" + i + "nurse"  + j); 
+                }
+            }
+        }
+        for (int m = 0; m < nrNurses; m++) {
+
             for (int n = 0; n < totalShifts; n++) {
-                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
-                    newRoster[m][n]=1;
+                if ((n + 1) % 5 == 0 && newRoster[m][n - 1] == 0 && newRoster[m][n - 2] == 0 && newRoster[m][n - 4] == 0) {
+                    newRoster[m][n] = 1;
                 }
-    
-                }
-            System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));  
+
+            }
+            System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
         }
         return newRoster;
     }// Geen E,L na 
-    public static int[][] generateRosterConsecutiveRule(){
+
+    public static int[][] generateRosterConsecutiveRule() {
         int countConsecNurse = 0;
         int[][] newRoster = generateRoster();
         for (int j = 0; j < nrNurses; j++) {
-            countConsecNurse=0;
+            countConsecNurse = 0;
             for (int i = 0; i < totalShifts; i++) {
                 double k = (i + 1) % 5; //FREE
                 if (k == 0 && newRoster[j][i] == 0) {
                     countConsecNurse++;
                     //System.out.println(countConsecNurse);
                     if (countConsecNurse > 5) {
-                       newRoster[j][i-1]=0;
-                       newRoster[j][i-2]=0;
-                       newRoster[j][i-4]=0;
+                        newRoster[j][i - 1] = 0;
+                        newRoster[j][i - 2] = 0;
+                        newRoster[j][i - 4] = 0;
                         // System.out.println("location : shift" + i + "nurse"  + j); 
-                    }}
-                    if (k == 0 && newRoster[j][i] == 1){
-                        countConsecNurse=0;
                     }
+                }
+                if (k == 0 && newRoster[j][i] == 1) {
+                    countConsecNurse = 0;
+                }
 //                    
-            }}
-        for ( int m = 0; m < nrNurses; m++) {
-            
+            }
+        }
+        for (int m = 0; m < nrNurses; m++) {
+
             for (int n = 0; n < totalShifts; n++) {
-                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
-                    newRoster[m][n]=1;
+                if ((n + 1) % 5 == 0 && newRoster[m][n - 1] == 0 && newRoster[m][n - 2] == 0 && newRoster[m][n - 4] == 0) {
+                    newRoster[m][n] = 1;
                 }
-                }
-            System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));  
+            }
+            System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
         }
         return newRoster;
     } // Geen 5x on na elkaa
-    public static int[][] generateRosterOneShiftPerDay(){
+
+    public static int[][] generateRosterOneShiftPerDay() {
         int[][] newRoster = new int[nrNurses][totalShifts];
-        for ( int i = 0; i < nrNurses; i++) { 
-            for(int d =0;d<totalShifts;d+=5){
-                int nrOfShifts=0;
-            while (nrOfShifts<1) {
-                 Random rando= new Random();
-               int shift= rando.nextInt(5);
-               if(shift%5 ==0  || (shift+3)%5 ==0 || (shift+2)%5 ==0){
-               newRoster[i][d+shift]=1;
-               nrOfShifts++;
-               }
-                }}
-             //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));  
-        
-    }
-        for ( int m = 0; m < nrNurses; m++) {
+        for (int i = 0; i < nrNurses; i++) {
+            for (int d = 0; d < totalShifts; d += 5) {
+                int nrOfShifts = 0;
+                while (nrOfShifts < 1) {
+                    Random rando = new Random();
+                    int shift = rando.nextInt(5);
+                    if (shift % 5 == 0 || (shift + 3) % 5 == 0 || (shift + 2) % 5 == 0) {
+                        newRoster[i][d + shift] = 1;
+                        nrOfShifts++;
+                    }
+                }
+            }
+            //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));  
+
+        }
+        for (int m = 0; m < nrNurses; m++) {
             for (int n = 0; n < totalShifts; n++) {
                 if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
                     newRoster[m][n]=1;
@@ -270,7 +306,7 @@ roster1= generateRosterOneShiftPerDay20Shifts();
     }
 
     private static int[][] muteer(int[][] roster, int iterations) {
-        int[][] r1= roster;
+        int[][] r1 = roster;
         int[][] bestRoster = roster;
         int i1;
         // minimum = Double.POSITIVE_INFINITY;
@@ -285,10 +321,10 @@ roster1= generateRosterOneShiftPerDay20Shifts();
     }
 
     private static int[][] randomMutatie(int[][] roster) {
-        for(int t =0; t < 140; t++){
-        int i = (int) Math.random() * nrNurses + 1;
-        int j = (int) Math.random() * totalShifts + 1;
-        roster[i][j] = (int) (2 * Math.random());
+        for (int t = 0; t < 140; t++) {
+            int i = (int) Math.random() * nrNurses + 1;
+            int j = (int) Math.random() * totalShifts + 1;
+            roster[i][j] = (int) (2 * Math.random());
         }
         return roster;
     }
@@ -477,16 +513,17 @@ roster1= generateRosterOneShiftPerDay20Shifts();
                         if (roster[j][i + 2] == 1) {
 
                             pen += PEN_SUCCESION;
-                             //System.out.println("location : shift" + i + "nurse"  + j); 
+                            //System.out.println("location : shift" + i + "nurse"  + j); 
                         }
                     }
                     if (i + 2 >= totalShifts && roster[j][0] == 1) {
                         pen += PEN_SUCCESION;
-                         //System.out.println("location : shift" + i + "nurse"  + j); 
+                        //System.out.println("location : shift" + i + "nurse"  + j); 
                     }
                 }
             }
-        }for (int j = 0; j < nrNurses; j++) {
+        }
+        for (int j = 0; j < nrNurses; j++) {
             for (int i = 0; i < totalShifts; i++) {
                 double k = (i + 2) % 5; // NIGHT 
                 if (k == 0 && roster[j][i] == 1) {
@@ -495,13 +532,12 @@ roster1= generateRosterOneShiftPerDay20Shifts();
 
                             pen += PEN_SUCCESION;
                             //System.out.println("location : shift" + i + "nurse"  + j); 
-                                    
-                                  
+
                         }
                     }
                     if (i + 4 >= totalShifts && roster[j][2] == 1) {
                         pen += PEN_SUCCESION;
-                         //System.out.println("location : shift" + i + "nurse"  + j); 
+                        //System.out.println("location : shift" + i + "nurse"  + j); 
                     }
                 }
             }
@@ -515,7 +551,7 @@ roster1= generateRosterOneShiftPerDay20Shifts();
         int pen = 0;
         int countConsecNurse = 0;
         for (int j = 0; j < nrNurses; j++) {
-            countConsecNurse=0;
+            countConsecNurse = 0;
             for (int i = 0; i < totalShifts; i++) {
                 double k = (i + 1) % 5; //FREE
                 if (k == 0 && roster[j][i] == 0) {
@@ -528,6 +564,8 @@ roster1= generateRosterOneShiftPerDay20Shifts();
                     if (k == 0 && roster[j][i] == 1){
                         countConsecNurse=0;
                     }
+                }
+                
 //                     if (k == 0 && roster[j][i] == 0 && i== totalShifts-1){// Als op laatste dag monthly roster gewerkt wordt=> Kijken naar eerste dag vd maand.
 //                         i=4;
 //                         while(roster[j][i]==0){
@@ -541,7 +579,8 @@ roster1= generateRosterOneShiftPerDay20Shifts();
 //                     } 
 //                }
 //            }}
-            }}
+            }
+        
         pen = nrOfTooMuchConsec * PEN_CONSEC;
         System.out.println("CONSECUTIVE SHIFTS " + pen);
         return pen;
@@ -573,16 +612,17 @@ roster1= generateRosterOneShiftPerDay20Shifts();
         int pen = 0;
         for (int j = 0; j < nrNurses; j++) {
             for (int i = 0; i < totalShifts; i++) {
-              if (roster[j][i] != cyclicalRosterEncoded[j][i]){
-                
-                pen+=PEN_NONCYCLICAL;
+                if (roster[j][i] != cyclicalRosterEncoded[j][i]) {
+
+                    pen += PEN_NONCYCLICAL;
+                }
+
             }
-       
-    }} System.out.println("PENALTY NONCYCLICAL: "+ pen);
+        }
+        System.out.println("PENALTY NONCYCLICAL: " + pen);
         return pen;
     }
 }
-
 
 //         private static void encode(int[][] cr, int[] crt, String dep) {
 //        cyclicalRoster = new int[nrNurses][shifts.size()];

@@ -10,13 +10,18 @@ package caseefinal;
  * @author Viktor
  */
 public class Population {
-    Individual[] individuals;
 
-    /*
-     * Constructors
-     */
-    // Create a population
-    public Population(int populationSize, boolean initialise) {
+    public Individual[] individuals;
+
+    public Population(Individual[] pop, boolean initialise) {
+        individuals = new Individual[pop.length];
+        // Initialise population
+        if (initialise) {
+            // Loop and create individuals
+            individuals = pop;
+        }
+    }
+     public Population(int populationSize, boolean initialise) {
         individuals = new Individual[populationSize];
         // Initialise population
         if (initialise) {
@@ -28,8 +33,12 @@ public class Population {
             }
         }
     }
-
     /* Getters */
+
+    public Individual[] getIndividuals() {
+        return individuals;
+    }
+
     public Individual getIndividual(int index) {
         return individuals[index];
     }
@@ -38,7 +47,7 @@ public class Population {
         Individual fittest = individuals[0];
         // Loop through individuals to find fittest
         for (int i = 0; i < size(); i++) {
-            if (fittest.getFitness() <= getIndividual(i).getFitness()) {
+            if (fittest.getFitness() > getIndividual(i).getFitness()) {
                 fittest = getIndividual(i);
             }
         }
@@ -55,6 +64,4 @@ public class Population {
     public void saveIndividual(int index, Individual indiv) {
         individuals[index] = indiv;
     }
-}
-
 }

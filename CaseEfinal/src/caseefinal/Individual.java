@@ -16,23 +16,34 @@ public class Individual {
 
     public int[][] roster;
     public double OrigFitness;
-  
+
+    //static int defaultGeneLength = 64;
+    //private byte[] genes = new byte[defaultGeneLength];
+    // Cache
+    private double fitness = 0;
 
     public Individual(int[][] roster) {
         this.roster = roster;
         this.OrigFitness = Heuristic.getFitness(roster);
-   
-    }
-
-    public int[][] getRoster() {
-        return roster;
-    }
-
-    public double getOrigFitness() {
-        return OrigFitness;
     }
 
    
 
+    // Create a random individual
+    public void generateIndividual() {
+
+            //Genation methode
+    }
+
+    public double getFitness() {
+        if (fitness == 0) {
+            fitness = Heuristic.getFitness(roster);
+        }
+        return fitness;
+    }
+    public int size() {
+    return this.roster.length;
+    }
+    
 
 }
