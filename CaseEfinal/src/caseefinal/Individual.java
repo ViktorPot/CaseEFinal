@@ -53,10 +53,9 @@ public class Individual {
     }
 
     public double getOrigFitness() {
-        if (this.OrigFitness == 0) {
-            return Heuristic.getFitness(this.roster);
-        }
-        return OrigFitness;
+
+        return Heuristic.getFitness(this.getRoster());
+
     }
 
     public void setRoster(int[][] roster) {
