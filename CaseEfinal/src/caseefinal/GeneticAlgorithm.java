@@ -9,14 +9,11 @@ package caseefinal;
  *
  * @author Viktor
  */
-import GA.Individual;
-import GA.FitnessCalc; // Or use my fitnessCAlc
-
 public class GeneticAlgorithm {
 
-    public static int[][] roster; 
+    public static int[][] roster;
     public static int[] rosterType, nurseType;
-
+ // SELECTION, MUTATION
 // IN FORMAT OF BASIC CYCLICAL ROSTER
             /* GA parameters */
     private static final double uniformRate = 0.5;
@@ -27,7 +24,7 @@ public class GeneticAlgorithm {
     /* Public methods */
     // Evolve a population
     public static Population evolvePopulation(Population pop) {
-        Population newPopulation = new Population(pop.size(), false);
+        Population newPopulation = new Population(pop.getIndividuals(), false);
 
         // Keep our best individual
         if (elitism) {
