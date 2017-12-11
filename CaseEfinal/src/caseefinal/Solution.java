@@ -24,5 +24,17 @@ public class Solution {
         this.dep = dep;
     }
 
+    public int[][] getRoster() {
+        return roster;
+    }
+
+    public double getFitness() {
+        return fitness;
+    }
+
+    public Department getDep() {
+        return dep;
+    }
+
 
 }
