@@ -74,9 +74,11 @@ public class Heuristic {
      * @param dep
      * @return
      */
+    public static int[][] countNrOfShifts(int[][] currentRoster){
+        
+    }
     public static int[][] generateRoster(){
-   
-       
+
         System.err.println(nrNurses);
         // assign to the cyclical roster
         int[][] newRoster = new int[nrNurses][totalShifts];
@@ -255,11 +257,20 @@ public class Heuristic {
                Random rando= new Random();
                int shift= rando.nextInt(139);
                if(shift%5 ==0  || (shift+3)%5 ==0 || (shift+2)%5 ==0){
+               if(roster[i][shift]==1){
                newRoster[i][shift]=0;
                countShiftsNurse--;}
                    }
-               }
+               }}
+            for ( int m = 0; m < nrNurses; m++) {
+            for (int n = 0; n < totalShifts; n++) {
+                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
+                    newRoster[m][n]=1;
+                }}
+                   
+                     System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
             return newRoster;
+            
             }
 
 
