@@ -6,6 +6,7 @@
 package caseefinal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**
@@ -20,7 +21,7 @@ public class Individual {
     //static int defaultGeneLength = 64;
     //private byte[] genes = new byte[defaultGeneLength];
     // Cache
-    private double fitness = 0;
+
 
     public Individual(int[][] roster) {
         this.roster = roster;
@@ -44,6 +45,12 @@ public class Individual {
     public int size() {
     return this.roster.length;
     }
+
+    @Override
+    public String toString() {
+        return "Individual{" + "roster=" + Arrays.toString(roster[0]) + ", OrigFitness=" + OrigFitness + '}';
+    }
+    
     
 
 }

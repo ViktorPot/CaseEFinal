@@ -62,8 +62,8 @@ public class Heuristic {
         //System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
         //System.out.println(getFitness(roster1));
         //  int[][] rosterTest = (MPS(assignmentPMS()));
-
-        System.out.println("best roster " + getFitness(roster2));
+          populatePopulation(20);
+        //System.out.println("best roster " + getFitness(roster2));
         //  Solution sol = new Solution(r, nrNurses, dep);
         //GA.execute(population);
         return roster2;
@@ -87,7 +87,7 @@ public class Heuristic {
      * @return
      */
     
-public static int[][] fixRoster(int[][] roster) {
+    public static int[][] fixRoster(int[][] roster) {
         int[][] result = new int[nrNurses][totalShifts];
 
         for (int i = 0; i < nrNurses; i++) {
@@ -101,6 +101,18 @@ public static int[][] fixRoster(int[][] roster) {
             }
         }
         return result;
+    }
+
+    public static ArrayList<Individual>populatePopulation(int Iterations){
+        ArrayList<Individual> population = new ArrayList<Individual>();
+        for(int i=0; i<Iterations; i++){
+            int[][] newRoster = new int[nrNurses][totalShifts];
+            newRoster=generateRosterOneShiftPerDay20Shifts();
+            Individual ind= new Individual(newRoster);
+            population.add(ind);
+            System.out.println("Value: )"+ ind.toString());
+        }
+        return population;
     }
 
     public static int[][] generateRoster() {
@@ -317,6 +329,27 @@ public static int[][] fixRoster(int[][] roster) {
             }}
             return newRoster;
     }// genereert Roster met 20 dagen 1 shift
+    
+     public static int[][] generateRosterBasedOnPreference(Department d){
+        int[][] newRoster = new int[nrNurses][totalShifts];
+         for ( int i = 0; i < nrNurses; i++) { 
+              for(int j=0; j<totalShifts;j++){
+                  if(d.getNurses().get(i).getPrefGiven()[j]>10){
+                      newRoster[i][j]=1;}
+                      else{
+                              newRoster[i][j]=0;
+                              }
+                  } }
+              for (int m = 0; m < nrNurses; m++) {
+            for (int n = 0; n < totalShifts; n++) {
+                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
+                    newRoster[m][n]=1;
+                }}
+                   
+                     System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
+              }
+         return newRoster;
+     }
 
     public static int[][] MPS(int[][] currentRoster) {
         int[][] r1 = new int[nrNurses][totalShifts];
@@ -445,7 +478,7 @@ public static int[][] fixRoster(int[][] roster) {
             }
 
         }
-        System.out.println("Pref :" + pen);
+//        System.out.println("Pref :" + pen);
         return pen;
     }
 
@@ -478,7 +511,7 @@ public static int[][] fixRoster(int[][] roster) {
             }
         }
         double pen = (pen1 * PEN_MINCOV_TYPE_1 + penTotal * PEN_MINCOV);
-        System.out.println("SURPLUS : " + (penTotal * PEN_MINCOV));
+//        System.out.println("SURPLUS : " + (penTotal * PEN_MINCOV));
         return pen;
     }
 
@@ -507,7 +540,7 @@ public static int[][] fixRoster(int[][] roster) {
         }
         double pen = (pen1 * PEN_MINCOV_TYPE_1 + penTotal * PEN_MINCOV);
 
-        System.out.println("MINCOV : " + pen);
+//        System.out.println("MINCOV : " + pen);
 
         return pen;
     }
@@ -526,7 +559,7 @@ public static int[][] fixRoster(int[][] roster) {
             empl[i] = sum[i] / maxWorkingDays;
             pen += Math.abs(empl[i] - n.get(i).getEmplRate());
         }
-        System.out.println("PEN FAIRNESS : " + pen * PEN_FAIRNESS);
+//        System.out.println("PEN FAIRNESS : " + pen * PEN_FAIRNESS);
         return pen * PEN_FAIRNESS;
     }
 
@@ -570,7 +603,7 @@ public static int[][] fixRoster(int[][] roster) {
                 }
             }
         }
-        System.out.println("SUCCESIVE SHIFTS " + pen);
+//        System.out.println("SUCCESIVE SHIFTS " + pen);
         return pen;
     }
 
@@ -593,7 +626,7 @@ public static int[][] fixRoster(int[][] roster) {
                     if (k == 0 && roster[j][i] == 1){
                         countConsecNurse=0;
 
-                        System.out.println("location : shift" + i + "nurse" + j);
+                        //System.out.println("location : shift" + i + "nurse" + j);
 
                     }
                 if (k == 0 && roster[j][i] == 1) {
@@ -617,7 +650,7 @@ public static int[][] fixRoster(int[][] roster) {
         }
 
         pen = nrOfTooMuchConsec * PEN_CONSEC;
-        System.out.println("CONSECUTIVE SHIFTS " + pen);
+//        System.out.println("CONSECUTIVE SHIFTS " + pen);
         return pen;
     }
 
@@ -639,7 +672,7 @@ public static int[][] fixRoster(int[][] roster) {
             }
         }
         pen = countShiftsSurplus * PEN_MAXSHIFTS;
-        System.out.println("MAX NR OF SHIFTS PENALTY: " + pen);
+//        System.out.println("MAX NR OF SHIFTS PENALTY: " + pen);
         return pen;
     }
 
@@ -654,7 +687,7 @@ public static int[][] fixRoster(int[][] roster) {
 
             }
         }
-        System.out.println("PENALTY NONCYCLICAL: " + pen);
+//        System.out.println("PENALTY NONCYCLICAL: " + pen);
         return pen;
     }
 }
