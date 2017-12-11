@@ -5,6 +5,7 @@
  */
 package caseefinal;
 
+import com.sun.javafx.scene.traversal.Algorithm;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -26,6 +27,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 public class CaseEfinal {
 
     static int[][] roster;
+    public static int benchmark;
 
     /**
      * @param args the command line arguments
@@ -34,20 +36,22 @@ public class CaseEfinal {
         System.out.println("ENTER DEP LETTER (A,B,C,D)");
         Department d = Read.readAll("files/depA.xlsx", "A");
 //Heuristic.generateRoster();
-    //Heuristic.generateRoster20Shifts();
+        //Heuristic.generateRoster20Shifts();
         //roster = Heuristic.heuristic(d);
 //roster=Heuristic.generateRosterOneShiftPerDay20Shifts();
-Heuristic.heuristic(d);
+        Heuristic.heuristic(d);
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
-       // Print.printRoster(roster, "files/FormatDepA.xlsx");
-        Population = 
+        // Print.printRoster(roster, "files/FormatDepA.xlsx");
+        ArrayList<Individual> myPop = new ArrayList<>();
         int generationCount = 0;
-        while (myPop.getFittest().getFitness() < ) { // cyclical roster pref
+        while (Algo.getFittest(myPop).getOrigFitness() < benchmark) { // cyclical roster pref
             generationCount++;
-            System.out.println("Generation: " + generationCount + " Fittest: " + myPop.getFittest().getFitness());
-            myPop = Algortihm.evolvePopulation(myPop);
+            System.out.println("Generation: " + generationCount + " Fittest: " + Algorithm.getFittest(pop));
+            myPop = Algo.evolvePopulation(myPop);
         }
+        roster = Algo.getFittest(myPop).getRoster();
+        Print.printRoster(roster, "files/FormatDepA.xlsx");
     }
 
 }

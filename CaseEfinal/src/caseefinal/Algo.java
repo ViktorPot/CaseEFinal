@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author Viktor
  */
-public class Algortihm {
+public class Algo {
 
     public static int[][] roster;
     public static int[] rosterType, nurseType;
