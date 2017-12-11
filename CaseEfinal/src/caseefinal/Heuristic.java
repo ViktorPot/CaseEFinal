@@ -47,7 +47,7 @@ public class Heuristic {
     public static ArrayList<Individual> population;
 
     // MINIMIZE FITNESS!!!
-    public static int[][] heuristic(Department dep) {
+    public static int[][] heuristicArray(Department dep) {
         depUsed = dep;
         cyclicalRosterEncoded = dep.getCrEncoded(); // int (type) [nrNurses][Shifts]
         cyclicalRoster = dep.getCyclicalRoster();
@@ -59,18 +59,28 @@ public class Heuristic {
 
         // SET NURSE REQ per SHIFT
         // ALLE WAARDEN TOEKENNEN
-        //System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
+        System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
         //System.out.println(getFitness(roster1));
         //  int[][] rosterTest = (MPS(assignmentPMS()));
-          populatePopulation(20);
+          //populatePopulation(20);
         //System.out.println("best roster " + getFitness(roster2));
         //  Solution sol = new Solution(r, nrNurses, dep);
         //GA.execute(population);
-        return roster2;
+        return roster;
     }
+     public static ArrayList<Individual>heuristicPop(Department dep) {
+        depUsed = dep;
+        cyclicalRosterEncoded = dep.getCrEncoded(); // int (type) [nrNurses][Shifts]
+        cyclicalRoster = dep.getCyclicalRoster();
+        totalReq = dep.getTotalReq();
+        totalShifts = dep.getTotalShifts();
+        nrNurseType1 = dep.getNrType1();
+        nurses = dep.getNurses();
+        type1Req = dep.getType1Req();
+        ArrayList<Individual> pop= populatePopulation(20);
+        return pop;
+     }
 
-
-   
     public static int countNrOfShiftsAssingedNurse(int[][] currentRoster, int nurse){// telt voor een bepaalde nurse met een bepaald roster het aantal assingde shifts
         int nrOfShifts=0;
         for(int i=0; i<totalShifts;i++){
@@ -463,7 +473,7 @@ public class Heuristic {
         fitness += pen_consecShifts(roster, depUsed);
         fitness += pen_succesionShifts(roster, depUsed);
         fitness += pen_maxShifts(roster, depUsed);
-        
+        System.out.println(fitness);
         return fitness;
 
     }

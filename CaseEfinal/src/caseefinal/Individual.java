@@ -43,7 +43,7 @@ public class Individual {
             //Genation methode
     }
 
-
+   
     public int size() {
     return this.roster.length;
     }
@@ -59,7 +59,7 @@ public class Individual {
         return OrigFitness;
     }
 
- 
+  
 
     public void setRoster(int[][] roster) {
         this.roster = roster;

@@ -5,6 +5,8 @@
  */
 package caseefinal;
 
+
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -38,7 +40,7 @@ public class CaseEfinal {
         //Heuristic.generateRoster20Shifts();
         //roster = Heuristic.heuristic(d);
 //roster=Heuristic.generateRosterOneShiftPerDay20Shifts();
-      
+        Heuristic.heuristicArray(d);
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
         // Print.printRoster(roster, "files/FormatDepA.xlsx");
