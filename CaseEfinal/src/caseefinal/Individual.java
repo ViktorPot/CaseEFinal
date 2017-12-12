@@ -16,14 +16,12 @@ import java.util.HashMap;
 public class Individual {
 
     public int[][] roster;
-    public double OrigFitness;
 
     //static int defaultGeneLength = 64;
     //private byte[] genes = new byte[defaultGeneLength];
     // Cache
     public Individual(int[][] roster) {
         this.roster = roster;
-        this.OrigFitness = Heuristic.getFitness(roster);
     }
 
     public Individual(int imax, int jmax) {
@@ -34,7 +32,7 @@ public class Individual {
 
             }
         }
-        this.OrigFitness = 0;
+
     }
 
     // Create a random individual
@@ -49,13 +47,7 @@ public class Individual {
 
     @Override
     public String toString() {
-        return "Individual{" + "OrigFitness=" + this.getOrigFitness() + ", Roster=" + Arrays.toString(roster[0]) + '}';
-    }
-
-    public double getOrigFitness() {
-
-        return Heuristic.getFitness(this.getRoster());
-
+        return "Individual{" + "Roster = " + Arrays.toString(roster[0]) + '}';
     }
 
     public void setRoster(int[][] roster) {

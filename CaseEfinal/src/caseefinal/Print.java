@@ -23,7 +23,7 @@ public class Print {
         XSSFWorkbook workbook = new XSSFWorkbook();
         
         XSSFSheet sheet = workbook.createSheet("FITNESS = " + Heuristic.getFitness(roster));
-
+        System.out.println(Heuristic.getFitness(roster));
         for (int i = 0; i < roster.length; i++) {
 
             Row row = sheet.createRow(i);
