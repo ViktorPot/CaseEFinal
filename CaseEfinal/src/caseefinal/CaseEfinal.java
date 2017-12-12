@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JTable;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -34,6 +35,8 @@ public class CaseEfinal {
     public static void main(String[] args) {
         System.out.println("ENTER DEP LETTER (A,B,C,D)");
         Department d = Read.readAll("files/depA.xlsx", "A");
+       
+              
 //Heuristic.generateRoster();
         //Heuristic.generateRoster20Shifts();
         //roster = Heuristic.heuristic(d);
@@ -42,20 +45,21 @@ public class CaseEfinal {
         //Print.printRoster(roster, "files/FormatDepA.xlsx");
 
         // Print.printRoster(roster, "files/FormatDepA.xlsx");
-        ArrayList<Individual> myPop = Heuristic.heuristicPop(d);
-        int generationCount = 0;
-        for (int i = 0; i < 250; i++) { // cyclical roster pref
-
-            generationCount++;
-            System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
-            myPop = Algo.evolvePopulation(myPop);
-            for (Individual j : myPop) {
-                System.out.println(j);
-            }
-        }
-        System.out.println("done");
-        roster = Algo.getFittest(myPop).getRoster();
-        Print.printRoster(roster, "files/FormatDepA.xlsx");
+//        ArrayList<Individual> myPop = Heuristic.heuristicPop(d);
+//        int generationCount = 0;
+//        for (int i = 0; i < 250; i++) { // cyclical roster pref
+//
+//            generationCount++;
+//            System.out.println("Generation: " + generationCount + " Fittest: " + Algo.getFittest(myPop));
+//            myPop = Algo.evolvePopulation(myPop);
+//            for (Individual j : myPop) {
+//                System.out.println(j);
+//            }
+//        }
+//        System.out.println("done");
+//        roster = Algo.getFittest(myPop).getRoster();
+//        Print.printRoster(roster, "files/FormatDepA.xlsx");
+//    }
+//
     }
-
 }

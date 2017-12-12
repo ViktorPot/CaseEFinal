@@ -27,11 +27,11 @@ public class Heuristic {
     public static int[] totalReq, type1Req;
     public static int[][] cyclicalRoster, cyclicalRosterEncoded; //Roster in format as cyclicalRoster 
     public static int maxWorkingDays = 20;
-    public static int PEN_MINCOV = 100, PEN_MINCOV_TYPE_1 = 300,
+    public static int PEN_MINCOV = 200, PEN_MINCOV_TYPE_1 = 200,
             // PEN_NURSEDESIRED = 1, PEN_NURSEINDIFF = 5, PEN_NURSEAVERSION = 9,  in compliance with file
             // PEN_LEAVEDAY = 100, in compliance
-            PEN_SURPLUS = 0, // 5 per dag genomen
-            PEN_CYCLICALROSTER = 10,
+            PEN_SURPLUS = 20, // 5 per dag genomen
+            PEN_CYCLICALROSTER = 2,
             PEN_FAIRNESS = 50,
             WORKDAYSALLOWED = 5, // 5 shifts system ^^
             PEN_MAXSHIFTS = 100,
@@ -61,8 +61,10 @@ public class Heuristic {
         // ALLE WAARDEN TOEKENNEN
         //System.out.println("CYCLICAL FITNESS: " + getFitness(cyclicalRosterEncoded));
         //populatePopulation(nrShifts);
-        roster1= generateRosterBasedOnPreference(dep);
-        fixRoster(roster1);
+        getFitness(cyclicalRosterEncoded);
+        roster1 = generateRosterMinCovPreference(dep);
+        getFitness(roster1);
+        //fixRoster(roster1);
 //        getFitness(newRoster);
         //System.out.println(getFitness(roster1));
         //  int[][] rosterTest = (MPS(assignmentPMS()));
@@ -70,9 +72,8 @@ public class Heuristic {
         //System.out.println("best roster " + getFitness(roster2));
         //  Solution sol = new Solution(r, nrNurses, dep);
         //GA.execute(population);
-        return roster;
+        return roster1;
     }
-
 
     public static ArrayList<Individual> heuristicPop(Department dep) {
         depUsed = dep;
@@ -111,14 +112,14 @@ public class Heuristic {
                 if ((j + 4) % 5 == 0) {
                     result[i][j] = 0;
                 }
-                if((j+1)%5==0 && (roster[i][j - 1] == 1 || roster[i][j - 2] == 1 || roster[i][j - 4] == 1)){
-                    result[i][j]=0;
+                if ((j + 1) % 5 == 0 && (roster[i][j - 1] == 1 || roster[i][j - 2] == 1 || roster[i][j - 4] == 1)) {
+                    result[i][j] = 0;
                 }
                 if ((j + 1) % 5 == 0 && roster[i][j - 1] == 0 && roster[i][j - 2] == 0 && roster[i][j - 4] == 0) {// ALS 1 bij E,L,N => Free = 0 EN OMGEKEERD
                     result[i][j] = 1;
                 }
-                }
-           System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(result[i]));
+            }
+            System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(result[i]));
         }
         return result;
     }
@@ -126,19 +127,20 @@ public class Heuristic {
     public static ArrayList<Individual> populatePopulation(int Iterations) {
         ArrayList<Individual> population = new ArrayList<Individual>();
 
-        for(int r=0;r<50;r++){
-        
+        for (int r = 0; r < 50; r++) {
+
             int[][] newRoster1 = new int[nrNurses][totalShifts]; //ADD CYCLICAL
-            newRoster1=depUsed.getCrEncoded();
-            Individual ind= new Individual(newRoster1);
+            newRoster1 = depUsed.getCrEncoded();
+            Individual ind = new Individual(newRoster1);
             population.add(ind);
         }
         //System.out.println("Value: )"+ ind.toString());}
-        for(int i=0; i<1; i++){//ADD PREFERENCES 50
+        for (int i = 0; i < 1; i++) {//ADD PREFERENCES 50
             int[][] newRoster2 = new int[nrNurses][totalShifts];
-            newRoster2=generateRosterBasedOnPreference(depUsed);
+            newRoster2 = generateRosterBasedOnPreference(depUsed);
             Individual ind2 = new Individual(newRoster2);
-            population.add(ind2);}
+            population.add(ind2);
+        }
         //System.out.println("Value: )"+ ind2.toString());}
 //        for(int k=0; k<40;k++){// ADD ONE/DAY 20
 //            int[][] newRoster3 = new int[nrNurses][totalShifts];
@@ -146,13 +148,11 @@ public class Heuristic {
 //            Individual ind3 = new Individual(newRoster3);
 //            population.add(ind3);
 //        }
-            
-            //System.out.println("Value: )"+ ind3.toString());
 
-            //  System.out.println("Value: )" + ind.toString());
-
+        //System.out.println("Value: )"+ ind3.toString());
+        //  System.out.println("Value: )" + ind.toString());
         return population;
-        }
+    }
 
     public static int[][] generateRoster() {
 
@@ -376,97 +376,58 @@ public class Heuristic {
 
         int[][] newRoster = new int[nrNurses][totalShifts];
 
-         for ( int i = 0; i < nrNurses; i++) { 
-              for(int j=0; j<totalShifts;j++){
-                  if(d.getNurses().get(i).getPrefGiven()[j]<11){
-                      newRoster[i][j]=1;}
-                      else{
-                              newRoster[i][j]=0;
-                              }
-                  } }
-              
-            for (int m = 0; m < nrNurses; m++) {
+        for (int i = 0; i < nrNurses; i++) {
+            for (int j = 0; j < totalShifts; j++) {
+                if (d.getNurses().get(i).getPrefGiven()[j] < 11) {
+                    newRoster[i][j] = 1;
+                } else {
+                    newRoster[i][j] = 0;
+                }
+            }
+        }
+
+        for (int m = 0; m < nrNurses; m++) {
 
             for (int n = 0; n < totalShifts; n++) {
 
                 if ((n + 1) % 5 == 0 && newRoster[m][n - 1] == 0 && newRoster[m][n - 2] == 0 && newRoster[m][n - 4] == 0) {
-                    newRoster[m][n] = 1;                  
-                }}
-           System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
-                     
-         return newRoster;
-     }
-//    public static int[][] generateRosterOneShiftPerDayBasedOnPreference(Department d){
-//       int[][] newRoster = new int[nrNurses][totalShifts];
-//        for (int i = 0; i < nrNurses; i++) {
-//            for (int j = 0; j < totalShifts; j += 5) {
-//                    Random rando = new Random();
-//                    int shift = rando.nextInt(5);
-//                    if (shift % 5 == 0 || (shift + 3) % 5 == 0 || (shift + 2) % 5 == 0) {
-//                         if(d.getNurses().get(i).getPrefGiven()[i]>10){
-//                      newRoster[i][j]=1;}
-//                      else{
-//                              newRoster[i][j]=0;
-//                              
-//                    }
-//                }
-//            }
-//            //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));  
-//
-//                if ((n + 1) % 5 == 0 && newRoster[m][n - 1] == 0 && newRoster[m][n - 2] == 0 && newRoster[m][n - 4] == 0) {
-//                    newRoster[m][n] = 1;
-//                }
-//            System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
-//    }
-//        return newRoster;
-//    }
-    public static int[][] generateRosterMinCovPreference(Department d){
-         int[][] newRoster = new int[nrNurses][totalShifts];
-         for(int i=0; i<totalShifts;i++){
-             
-         }
-    }
-    public static int[][] MPS(int[][] currentRoster) {
-        int[][] r1 = new int[nrNurses][totalShifts];
-        int[][] bestRoster = currentRoster;
-        int i1;
-        // minimum = Double.POSITIVE_INFINITY;
-        for (i1 = 0; i1 < 1000; i1++) {
-            r1 = bestRoster;
-
-            int[][] r2 = assignmentPMS();
-
-            bestRoster = compareRoster(r1, r2);
-
+                    newRoster[m][n] = 1;
+                }
+            }
+            System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));
         }
-        return bestRoster;
-//        for (int m = 0; m < nrNurses; m++) {
-//            for (int n = 0; n < totalShifts; n++) {
-//                if((n+1)%5==0 && newRoster[m][n-1]==0 && newRoster[m][n-2]==0 && newRoster[m][n-4]==0){
-//                    newRoster[m][n]=1;
-//                }}}
-//                   
-//                     //System.out.println("Assignment" + (m + 1) + ": " + Arrays.toString(newRoster[m]));}
-//        return newRoster;
-//    }
+
+        return newRoster;
     }
-    private static int[][] shifting(int[][] currentRoster, int iterations) {
-        int[][] r1 = new int[nrNurses][totalShifts];
-        int[][] bestRoster = currentRoster;
-        int i1;
-        // minimum = Double.POSITIVE_INFINITY;
-        for (i1 = 0; i1 < iterations; i1++) {
-            r1 = bestRoster;
-            int[][] r2 = shiftRows(r1);
 
-            bestRoster = compareRoster(r1, r2);
 
+    public static int[][] generateRosterMinCovPreference(Department d) {
+        int[][] newRoster = new int[nrNurses][totalShifts];
+        for (int i = 0; i < totalShifts; i++) {
+            int countShifts = 0;
+            while (countShifts < totalReq[i]) {
+                Random rando = new Random();
+                int nurse = rando.nextInt(nrNurses);
+                if (i % 5 == 0 || (i + 3) % 5 == 0 || (i + 2) % 5 == 0) {
+                    if (d.getNurses().get(nurse).getPrefGiven()[i] < 15) {
+                        if (newRoster[nurse][i] == 0) {
+                            newRoster[nurse][i] = 1;
+                            countShifts++;
+                            //System.out.println("count: " +countShifts);
+                        }
+                    }
+                }
+            }
         }
-        return bestRoster;
-
+        newRoster = fixRoster(newRoster);
+        for (int i = 0; i < nrNurses; i++) {
+            //for (int s = 0; s < totalShifts; s++) {}
+            //System.out.println("Assignment" + (i + 1) + ": " + Arrays.toString(newRoster[i]));
+        }
+        return newRoster;
     }
 
-    private static int[][] compareRoster(int[][] r1, int[][] r2) {
+    public static int[][] compareRoster(int[][] r1, int[][] r2) {
         if (getFitness(r1) <= getFitness(r2)) {
             return r1;
 
@@ -476,54 +437,28 @@ public class Heuristic {
         }
     }
 
-    private static int[][] assignmentPMS() { //TABATA
-        int[][] roster = new int[nrNurses][totalShifts];
-        int i, j, n, s, min = 0, max = 1;
-        int[] som = new int[totalShifts];
-
-        for (i = 0; i < nrNurses; i++) {
-            for (j = 0; j < totalShifts; j++) {
-                roster[i][j] = (int) (2 * Math.random());
-
-            }
-
-        }
-
-//        for (j = 0; j < totalShifts; j++) {
-//            for (i = 0; i < nrNurses; i++) {
-//                if ((j + 4) % 5 != 0 && (j + 1) % 5 != 0 &&) {
-//                    roster[i][j] = min + (int) Math.round(Math.random());
-//                }
-//                if ((j + 4) % 5 == 0) {
-//                    roster[i][j] = 0;
-//                }
-//            }
-//        }
-        return roster;
-    }
-
-    private static int[][] shiftRows(int[][] r) {
-        int min = 0, max = nrNurses - 1;
-        int[][] roster = new int[nrNurses][totalShifts];
-
-        int rand1 = min + (int) (Math.random() * ((max - min) + 1));
-        int rand2 = min + (int) (Math.random() * ((max - min) + 1));
-        roster[rand2] = r[rand1];
-
-        return roster;
-
-    }
-
     public static double getFitness(int[][] roster) {
         double fitness = 0;
         fitness += pen_PrefAll(roster);
+        System.out.println("Preference: " + pen_PrefAll(roster));
         fitness += pen_MinCov(roster); // is per type berekend
+        System.out.println("MinCov " + pen_MinCov(roster));
         fitness += pen_Surplus(roster, depUsed); // is per type berekend
+        System.out.println("Surplus: " + pen_Surplus(roster, depUsed));
         fitness += pen_Fairness(roster, depUsed);
+        System.out.println("Fairness: " + pen_Fairness(roster, depUsed));
         fitness += pen_consecShifts(roster, depUsed);
-        fitness += pen_succesionShifts(roster, depUsed);
+        System.out.println("consecShifts: " + pen_consecShifts(roster, depUsed));
+        fitness += pen_succesionShiftsNight(roster, depUsed);
+        System.out.println("Sucession Night: " + pen_succesionShiftsNight(roster, depUsed));
+        fitness += pen_succesionShiftsLate(roster, depUsed);
+        System.out.println("Sucession Late: " + pen_succesionShiftsLate(roster, depUsed));
+        fitness += pen_succesionShiftsEarly(roster, depUsed);
+        System.out.println("Sucession Early: " + pen_succesionShiftsEarly(roster, depUsed));
         fitness += pen_maxShifts(roster, depUsed);
-        System.out.println("FITNESS: "+ fitness);
+        System.out.println("MaxShift: " + pen_maxShifts(roster, depUsed));
+        System.out.println(Arrays.toString(count_sumDay(roster, depUsed)[0]));
+        System.out.println("FITNESS: " + fitness);
         return fitness;
 
     }
@@ -538,40 +473,27 @@ public class Heuristic {
             }
 
         }
-        System.out.println("Pref :" + pen);
+        //System.out.println("Pref :" + pen);
         return pen;
     }
 
-    private static double pen_Surplus(int[][] roster, Department dep) { // GEEFT NIET DE JUISTE WEER
-        double pen1 = 0; // NIGHT , (i+3) % 5 LATE, (i+4) % 5 DAY , (i) % 5 EARLY, (i+1)% FREE
+    private static double pen_Surplus(int[][] roster, Department dep) {
         double penTotal = 0;
-
-        int sum1[] = new int[totalShifts];
         int sumTotal[] = new int[totalShifts];
-        int diff1[] = new int[totalShifts];
         int diffTotal[] = new int[totalShifts];
 
         for (int j = 0; j < totalShifts; j++) {
-            if ((j + 1) % 5 != 0 && j != totalShifts - 1) {
-                for (int i = 0; i < nrNurses; i++) {
-                    if (i < 6 && roster[i][j] == 1) {
-                        sum1[j] += 1;
-                        sumTotal[j] += 1;
-                    } else if (roster[i][j] == 1) {
-                        sumTotal[j] += 1;
-                    }
+            for (int i = 0; i < nrNurses; i++) {
+                if (roster[i][j] == 1 && (j + 1) % 5 != 0) {
+                    sumTotal[j] += 1;
                 }
-                diff1[j] = Math.max(0, sum1[j] - type1Req[j]);
-                diffTotal[j] = Math.max(0, sumTotal[j] - totalReq[j]);
-                pen1 += diff1[j];
-                penTotal += diffTotal[j];
-            } else {
-                diff1[j] = 0;
-                diffTotal[j] = 0;
             }
+            diffTotal[j] = Math.max(0, sumTotal[j] - totalReq[j]);
+            penTotal += diffTotal[j];
         }
-        double pen = (pen1 * PEN_MINCOV_TYPE_1 + penTotal * PEN_MINCOV);
-//        System.out.println("SURPLUS : " + (penTotal * PEN_MINCOV));
+        double pen = (penTotal * PEN_MINCOV);
+
+//        System.out.println("MINCOV : " + pen);
         return pen;
     }
 
@@ -618,18 +540,18 @@ public class Heuristic {
             empl[i] = sum[i] / maxWorkingDays;
             pen += Math.abs(empl[i] - n.get(i).getEmplRate());
         }
-      //System.out.println("PEN FAIRNESS : " + pen * PEN_FAIRNESS);
+        //System.out.println("PEN FAIRNESS : " + pen * PEN_FAIRNESS);
         return pen * PEN_FAIRNESS;
     }
 
-    private static double pen_succesionShifts(int[][] roster, Department dep) {//Nog LATE toevoegen!!
+    private static double pen_succesionShiftsNight(int[][] roster, Department dep) {//Nog LATE toevoegen!!
         int pen = 0;
 
         for (int j = 0; j < nrNurses; j++) {
             for (int i = 0; i < totalShifts; i++) {
                 double k = (i + 2) % 5; // NIGHT , (i+3) % 5 LATE, (i+4) % 5 DAY , (i) % 5 EARLY, (i+1)% FREE
-                if (k == 0 && roster[j][i] == 1) {//niet gevolgd door early
-                    if ((i + 2) < totalShifts) {
+                if (k == 0 && roster[j][i] == 1) {//niet gevolgd door early // ALS NIGHT SHIFT =1
+                    if ((i + 2) < totalShifts) { // Binnen bereik
                         if (roster[j][i + 2] == 1) {
 
                             pen += PEN_SUCCESION;
@@ -656,6 +578,90 @@ public class Heuristic {
                         }
                     }
                     if (i + 4 >= totalShifts && roster[j][2] == 1) {
+                        pen += PEN_SUCCESION;
+                        //System.out.println("location : shift" + i + "nurse"  + j); 
+                    }
+                }
+            }
+        }
+//        System.out.println("SUCCESIVE SHIFTS " + pen);
+        return pen;
+    }
+
+    private static double pen_succesionShiftsEarly(int[][] roster, Department dep) {//Nog LATE toevoegen!!
+        int pen = 0;
+
+        for (int j = 0; j < nrNurses; j++) {
+            for (int i = 0; i < totalShifts; i++) {
+                double k = (i) % 5; // EARLY , (i+3) % 5 LATE, (i+4) % 5 DAY , (i) % 5 EARLY, (i+1)% FREE
+                if (k == 0 && roster[j][i] == 1) {//niet gevolgd door early
+                    if ((i + 2) < totalShifts) {
+                        if (roster[j][i + 2] == 1) {
+
+                            pen += PEN_SUCCESION;
+                            //System.out.println("location : shift" + i + "nurse"  + j); 
+                        }
+                    }
+//                    if (i + 2 >= totalShifts && roster[j][0] == 1) {
+//                        pen += PEN_SUCCESION;
+//                        //System.out.println("location : shift" + i + "nurse"  + j); 
+//                    }
+                }
+            }
+        }
+        for (int j = 0; j < nrNurses; j++) {
+            for (int i = 0; i < totalShifts; i++) {
+                double k = (i) % 5; // Early 
+                if (k == 0 && roster[j][i] == 1) {
+                    if ((i + 3) < totalShifts) {//niet gevolgd door Late
+                        if (roster[j][i + 3] == 1) {
+                            pen += PEN_SUCCESION;
+                            //System.out.println("location : shift" + i + "nurse"  + j); 
+                        }
+                    }
+//                    if (i + 4 >= totalShifts && roster[j][2] == 1) {
+//                        pen += PEN_SUCCESION;
+//                        //System.out.println("location : shift" + i + "nurse"  + j); 
+//                    }
+                }
+            }
+        }
+//        System.out.println("SUCCESIVE SHIFTS " + pen);
+        return pen;
+    }
+
+    private static double pen_succesionShiftsLate(int[][] roster, Department dep) {//Nog LATE toevoegen!!
+        int pen = 0;
+
+        for (int j = 0; j < nrNurses; j++) {
+            for (int i = 0; i < totalShifts; i++) {
+                double k = (i + 3) % 5; // Late , (i+3) % 5 LATE, (i+4) % 5 DAY , (i) % 5 EARLY, (i+1)% FREE
+                if (k == 0 && roster[j][i] == 1) {//niet gevolgd door Night
+                    if ((i + 1) < totalShifts) {
+                        if (roster[j][i + 1] == 1) {
+
+                            pen += PEN_SUCCESION;
+                            //System.out.println("location : shift" + i + "nurse"  + j); 
+                        }
+                    }
+                    if (i + 1 >= totalShifts && roster[j][0] == 1) {
+                        pen += PEN_SUCCESION;
+                        //System.out.println("location : shift" + i + "nurse"  + j); 
+                    }
+                }
+            }
+        }
+        for (int j = 0; j < nrNurses; j++) {
+            for (int i = 0; i < totalShifts; i++) {
+                double k = (i + 3) % 5; // LATE 
+                if (k == 0 && roster[j][i] == 1) {
+                    if ((i + 3) < totalShifts) {//niet gevolgd door Early
+                        if (roster[j][i + 3] == 1) {
+                            pen += PEN_SUCCESION;
+                            //System.out.println("location : shift" + i + "nurse"  + j); 
+                        }
+                    }
+                    if (i + 3 >= totalShifts && roster[j][0] == 1) {
                         pen += PEN_SUCCESION;
                         //System.out.println("location : shift" + i + "nurse"  + j); 
                     }
@@ -735,6 +741,27 @@ public class Heuristic {
         return pen;
     }
 
+    private static int[][] count_sumDay(int[][] roster, Department dep) {
+        int[][] sum = new int[nrNurses][nrDays];
+        for (int j = 0; j < totalShifts; j++) {
+            for (int i = 0; i < nrNurses; i++) {
+
+                double k = (j) % 5;
+
+                if (k == 0) {
+                    for (int s = 0; s < nrShifts -1; s++) {
+                
+                            sum[i][j / 5] += roster[i][j + s];
+                        
+                    }
+                }
+
+            }
+
+        }
+        return sum;
+    }
+
     private static double pen_nonCyclical(int[][] roster, Department dep) {
         int pen = 0;
         for (int j = 0; j < nrNurses; j++) {
@@ -751,55 +778,5 @@ public class Heuristic {
     }
 }
 
-//         private static void encode(int[][] cr, int[] crt, String dep) {
-//        cyclicalRoster = new int[nrNurses][shifts.size()];
-//        for (int s = 0; s < shifts.size(); s++) {
-//            for (int n = 0; n < nrNurses; n++) {
-//                cyclicalRoster[n][s] = 0;
-//            }
-//
-//        }
-//
-//        for (int i = 0; i < nrNurses; i++) {
-//            for (int j = 0; j < nrDays; j++) {
-//
-//                cyclicalRoster[i][typeToIndex(cr[i][j], j)] = 1 * crt[i];
-//
-//            }
-//        }
-//
-//    }
-//
-//    private static int indexToType(int i) {
-//        switch (i) {
-//            case 0:
-//                return 1; //Early
-//            case 1:
-//                return 666; //Day DEVIL
-//            case 2:
-//                return 2; //Late
-//            case 3:
-//                return 3; //Night
-//            case 4:
-//                return 0; //Free
-//        }
-//        return 0;
-//
-//    }
-//
-//    private static int typeToIndex(int i, int j) { //j Day
-//        switch (i) {
-//            case 0:
-//                return 4 + 5 * j; //Free
-//            case 1:
-//                return 0 + 5 * j; //Early
-//            case 2:
-//                return 2 + 5 * j; //Late
-//            case 3:
-//                return 3 + 5 * j; //Night
-//
-//        }
-//        return 3;
-//
-//    }
+
 
