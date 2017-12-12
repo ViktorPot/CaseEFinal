@@ -86,9 +86,7 @@ public class Algo {
     private static void shiftRow(Individual indiv) {
         for (int i = 0; i < indiv.getRoster().length; i++) {
             if (Math.random() <= shiftRowRate) {
-
                 indiv.getRoster()[i] = indiv.getRoster()[(int) (Math.random()) * indiv.getRoster().length];
-
             }
         }
     }
@@ -125,7 +123,7 @@ public class Algo {
         Individual fittest = pop.get(0);
         // Loop through individuals to find fittest
         for (Individual i : pop) {
-            if (fittest.getOrigFitness() > i.getOrigFitness()) {
+            if (Heuristic.getFitness(fittest.getRoster()) > Heuristic.getFitness(i.getRoster())) {
                 fittest = i;
             }
         }

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package caseefinal;
+package NotNeeded;
 
+import caseefinal.Nurse;
+import caseefinal.Shift;
 import java.util.ArrayList;
 
 /**
