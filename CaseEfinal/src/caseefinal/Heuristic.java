@@ -420,7 +420,12 @@ public class Heuristic {
 //    }
 //        return newRoster;
 //    }
-
+    public static int[][] generateRosterMinCovPreference(Department d){
+         int[][] newRoster = new int[nrNurses][totalShifts];
+         for(int i=0; i<totalShifts;i++){
+             
+         }
+    }
     public static int[][] MPS(int[][] currentRoster) {
         int[][] r1 = new int[nrNurses][totalShifts];
         int[][] bestRoster = currentRoster;
